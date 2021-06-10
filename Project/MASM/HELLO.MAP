@@ -1,9 +1,0 @@
-
- Start  Stop   Length Name               Class
-
- 00000H 0004AH 0004BH DATA               
- 00050H 0008BH 0003CH TACK               
- 00090H 000D0H 00041H CODE               
-
-Program entry point at 0009:0000
-
