@@ -3,3 +3,9 @@
 该仓库的地址：
 git@github.com:TomandJerryandme/project.git
 测试提交
+
+main分支为主分支
+往远程仓库推代码，尽量使用这个分支
+git push origin main
+git merge branch_name
+branch_name为需要往main分支合并的分支
