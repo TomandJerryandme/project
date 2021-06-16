@@ -1,5 +1,11 @@
 这是一个LICENSE文件
 
+语言的切换
+1、Ctrl+Shift+p
+2、输入configure display language
+3、选择语言
+4、重启
+
 该仓库的地址：
 git@github.com:TomandJerryandme/project.git
 测试提交
