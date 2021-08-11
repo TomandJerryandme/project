@@ -25,6 +25,61 @@ CSV_COMMON_STRING = """"""
 # csv文件是以","为分隔符
 # xml文件
 
+"""
+一般的xml文件预置格式
+
+其中，param有可能是一个ref值，就需要变化
+如果是多个ref值
+
+并且，record中，多个参数的值可能是相同的
+
+"𓆗𓆏𓆌𓆉𓆈𓅰𓅭𓅪𓅦𓅜𓄿𓃻𓃹𓃷𓃵𓃲𓃱𓃰𓃯𓃬𓆧𓆦𓆣𓆡𓆟𓆗𓆏𓆌𓆉𓆈𓅰𓅭𓅪𓅦𓆗𓆏𓆌𓆉𓆈𓅰𓅭𓅪𓅦𓅜𓄿𓃻𓃹𓃷𓃵𓃲𓃱𓃰𓃯𓃬𓆧𓆦𓆣𓆡𓆟𓆗𓆏𓆌𓆉𓆈𓅰𓅭𓅪𓅦𓆗𓆏𓆌𓆉𓆈𓅰𓅭"
+
+<odoo>
+    <data noupdate="1">
+        <!-- 注释 -->
+        <record id="id1" model="model">
+            <field name="param1">1</field>
+            <field name="param2">serial_number</field>
+            <field name="param3">6</field>
+            <field name="param4">1</field>
+            <field name="param5">1</field>
+            <field name="param6" eval="ref('ps_mdm.currency-1')"/>
+            <field name="param7" eval="'_'.join([str(ref('ps_mdm.account-1')), str(ref('ps_mdm.account-2')), str(ref('ps_mdm.account-3'))])"></field>
+            %s
+        </record>
+        
+        <record id="id2" model="model">
+            <field name="param1">1</field>
+            <field name="param2">serial_number</field>
+            <field name="param3">6</field>
+            <field name="param4">1</field>
+            <field name="param5">1</field>
+            # 从这里有可能不同，就可以将上面的这几个参数放在公共的record里
+            <field name="param6" eval="ref('ps_mdm.currency-1')"/>
+            <field name="param7" eval="'_'.join([str(ref('ps_mdm.account-1')), str(ref('ps_mdm.account-2')), str(ref('ps_mdm.account-3'))])"></field>
+        </record>
+    </data>
+</odoo>
+
+还有一种特殊的情况：
+    如果预置的记录中，记录中不同的地方如%s里，不同的有相同的如：{common1：diff1, common2:diff2, common3:diff3}
+    这种的情况目前没有实现递归调用，只能实现第一层
+
+common_str = '
+        <record id="id2" model="model">
+            <record id="id2" model="model">
+            <field name="param1">1</field>
+            <field name="param2">serial_number</field>
+            <field name="param3">6</field>
+            <field name="param4">1</field>
+            <field name="param5">1</field>
+            %s或者format方式进行动态赋值
+        <record id="id2" model="model">'
+
+"""
+
+
 
 def generate_preset_file(file_type, params, file_name="preset_file", source_type="file", source_file_path=None):
     """
@@ -62,7 +117,7 @@ def generate_xml_common_format(params):
 def generate_csv_format(params):
     """
     生成csv文件预置格式
-    :param params:
+    :param params:(LIST)
     :return:
     """
     global CSV_COMMON_STRING
