@@ -1,17 +1,33 @@
 # python中logging的用法
 
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(filename)s [line:%(lineno)d] - %(levelname)s: %(message)s')  # logging.basicConfig函数对日志的输出格式及方式做相关配置
+
+
+# python中logging的用法
+import os, sys
 import logging
 
-# _logging = logging.getLogger(__name__)
-# print(_logging.disabled)
-# # _logging.info("info")
-# _logging.warn("warn")
-# _logging.warning("warning")
-# _logging.debug("debug")
-# _logging.error("error")
+BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_LEVEL = logging.DEBUG
+logging.basicConfig(level=LOG_LEVEL, format='%(asctime)s - %(filename)s [line:%(lineno)d] - %(levelname)s: %(message)s')  # logging.basicConfig函数对日志的输出格式及方式做相关配置
 
-str_code = '发射๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊๊'
-# len(str_code) = 326
-# 其中 射上面的那些字符是MBCS字符编码，
-print(str_code[3].encode('utf-8'))
-# b'\xe0\xb9\x8a'   utf-8对应编码
+def getlogger():
+    # getLogger(file_name)
+    logger = logging.getLogger()
+    logger.setLevel(LOG_LEVEL)
+    # file_name = 'log.log'
+    # header = logging.FileHandler('%s/db/%s' % (BASE_PATH, file_name))
+    # header.setLevel(LOG_LEVEL)
+    # file_format = logging.Formatter('%(asctime)s - %(filename)s [line:%(lineno)d] - %(levelname)s: %(message)s')
+    # header.setFormatter(file_format)
+    return logger
+
+
+# 由于日志基本配置中级别设置为DEBUG，所以一下打印信息将会全部显示在控制台上
+# logging.info('this is a loggging info message')
+# logging.debug('this is a loggging debug message')
+# logging.warning('this is loggging a warning message')
+# logging.error('this is an loggging error message')
+# logging.critical('this is a loggging critical message')
