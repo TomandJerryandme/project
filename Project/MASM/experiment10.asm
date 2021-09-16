@@ -24,7 +24,7 @@ start:  mov dh, 8               ; 第8行 8*160 = 1280 = 500h
         mov ds, ax              ; 数据段地址初始化
         mov si, 0
         call show_str           ; 调用展示字符串的子程序
-        mov ax, 4c00h           ; 结束指令
+        mov ax, 4c00h           ; 结束指令      表示调用第 21h 号中断的 4c00h 号子程序 功能为 程序返回
         int 21h
 show_str:
         push ax                 ; 寄存器push暂存
