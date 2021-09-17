@@ -7,7 +7,7 @@ CODE SEGMENT USE16
 BEG:
     MOV AX, DATA
     MOV DS, AX
-    MOV AH, 9
+    MOV AH, 9           ; 调用 21h 中断的 9 号功能，作用是输出字符串，直到遇到 '$'
     MOV DX, OFFSET MESG
     INT 21H         ; 这里到上面的所有指令，基本上都是为了输出字符串做准备; MOV AH, 9 INT 21H 是输出字符串的功能， MOV AH, 1   INT 21H 是输入字符串的功能
     MOV AH, 4CH
