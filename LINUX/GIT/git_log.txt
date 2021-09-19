@@ -1,0 +1,6 @@
+https://git-scm.com/docs/git-log
+
+git log  的用法
+git log 的使用可是说是git中最复杂，但也算是功能最强大的命令了(因为除了对代码进行操作的命令外，基本上就是追踪的命令了，而追踪命令很大程度上与git log密不可分)
+
+git log 的本质是展示提交信息。
