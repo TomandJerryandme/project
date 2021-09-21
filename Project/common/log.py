@@ -60,7 +60,7 @@ def init_getlogger():
     # logger = logging.getLogger()
     # logger.setLevel(LOG_LEVEL)
 
-    format = '%(asctime)s %(pid)s %(levelname)s %(dbname)s %(name)s: %(message)s %(perf_info)s'
+    format = '%(asctime)s pid:%(pid)s   %(levelname)s  dbname: %(dbname)s   name: %(name)s: msg: %(message)s  +=+=+  %(perf_info)s'
     handler = logging.StreamHandler()
     formatter = ColoredFormatter(format)
     # 因为在这里对handler进行了 formatter的赋值， 所以在有日志需要输出的时候，会调用 handler 中的formatter方法，找到 ColoredFormatter 的 format方法进行封装处理

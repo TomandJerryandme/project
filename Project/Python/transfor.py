@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+import optparse     # 用于配置命令行参数 比如 -c config.conf 这个config.conf可以不通过sys.argv来获取
 
 _logger = logging.getLogger(__name__)
 
