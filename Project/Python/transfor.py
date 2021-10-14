@@ -34,7 +34,8 @@ def decimal_transfor(old_value, old_decimal, new_decimal):
     new_func = DECIMAL_DICT.get(int(new_decimal))
     # 这种用法只能在int方法上使用，其他三个函数都只有一个形参
     value = int(old_value, int(old_decimal))
-    return new_func(int(value))
+    # return new_func(int(value))
+    return DECIMAL_DICT.get(int(new_decimal))(int(value))
 
 
 def upper_and_lower_transfor(origin_str, type="", is_head_lower=False, is_body_change=False):
