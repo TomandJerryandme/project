@@ -1,31 +1,24 @@
 """
 导入的核心实现
-This module is NOT meant to be directly imported! It has been designed such
-that it can be bootstrapped into Python as the implementation of import. As
-such it requires the injection of specific modules and attributes in order to
-work. One should use importlib as the public-facing version of this module.
-
+This module is NOT meant to be directly imported! It has been designed such that it can be bootstrapped into Python as the implementation of import. As such it requires the injection of specific modules and attributes in order to work. One should use importlib as the public-facing version of this module.
+此模块不是直接导入的！它的设计就是这样的它可以作为导入的实现引导到Python中。像这样就需要注入特定的模块和属性，以便工作应该使用importlib作为此模块的面向公众版本。
 """
-#
-# IMPORTANT: Whenever making changes to this module, be sure to run a top-level
-# `make regen-importlib` followed by `make` in order to get the frozen version
-# of the module updated. Not doing so will result in the Makefile to fail for
-# all others who don't have a ./python around to freeze the module
-# in the early stages of compilation.
-#
+# IMPORTANT: Whenever making changes to this module, be sure to run a top-level `make regen-importlib` followed by `make` in order to get the frozen version of the module updated. Not doing so will result in the Makefile to fail for all others who don't have a ./python around to freeze the module in the early stages of compilation.
+# 重要提示：每当对此模块进行更改时，请确保先运行顶级“make regen importlib”，然后运行“make”，以便更新模块的冻结版本。不这样做将导致Makefile失败，其他没有./python的人将无法在编译的早期阶段冻结模块。
 
 # See importlib._setup() for what is injected into the global namespace.
+# 有关注入全局命名空间的内容，请参见importlib.\u setup()。
 
-# When editing this code be aware that code executed at import time CANNOT
-# reference any injected objects! This includes not only global code but also
-# anything specified at the class level.
-
+# When editing this code be aware that code executed at import time CANNOT reference any injected objects! This includes not only global code but also anything specified at the class level.
+# 编辑此代码时请注意，导入时执行的代码不能引用任何注入的对象！这不仅包括全局代码，还包括在类级别指定的任何内容。
 # Bootstrap-related code ######################################################
 
 _bootstrap_external = None
 
 def _wrap(new, old):
-    """Simple substitute for functools.update_wrapper."""
+    """Simple substitute for functools.update_wrapper.
+       functools.update_warpper的简单替代品。
+    """
     for replace in ['__module__', '__name__', '__qualname__', '__doc__']:
         if hasattr(old, replace):
             setattr(new, replace, getattr(old, replace))
@@ -40,8 +33,11 @@ def _new_module(name):
 
 # A dict mapping module names to weakrefs of _ModuleLock instances
 # Dictionary protected by the global import lock
+# dict将模块名称映射到_ModuleLock实例的weakrefs
+# 受全局导入锁保护的字典
 _module_locks = {}
 # A dict mapping thread ids to _ModuleLock instances
+# 将线程ID映射到_ModuleLock实例的dict
 _blocking_on = {}
 
 
@@ -50,12 +46,12 @@ class _DeadlockError(RuntimeError):
 
 
 class _ModuleLock:
-    """A recursive lock implementation which is able to detect deadlocks
-    (e.g. thread 1 trying to take locks A then B, and thread 2 trying to
-    take locks B then A).
+    """A recursive lock implementation which is able to detect deadlocks(e.g. thread 1 trying to take locks A then B, and thread 2 trying to take locks B then A).
+    # 检索死锁的递归锁的实现：eg: 线程1尝试先获取锁A，然后获取锁B，线程2尝试先获取锁B，然后获取锁A
     """
 
     def __init__(self, name):
+        # _ModuleLock 的属性： lock(锁), wakeup(解锁), name, owner(tid), count, waiters
         self.lock = _thread.allocate_lock()
         self.wakeup = _thread.allocate_lock()
         self.name = name
@@ -65,6 +61,7 @@ class _ModuleLock:
 
     def has_deadlock(self):
         # Deadlock avoidance for concurrent circular imports.
+        # 避免并发循环导入的死锁
         me = _thread.get_ident()
         tid = self.owner
         seen = set()
@@ -76,19 +73,15 @@ class _ModuleLock:
             if tid == me:
                 return True
             if tid in seen:
-                # bpo 38091: the chain of tid's we encounter here
-                # eventually leads to a fixpoint or a cycle, but
-                # does not reach 'me'.  This means we would not
-                # actually deadlock.  This can happen if other
-                # threads are at the beginning of acquire() below.
+                # bpo 38091: the chain of tid's we encounter here eventually leads to a fixpoint or a cycle, but does not reach 'me'.  This means we would not actually deadlock.  This can happen if other threads are at the beginning of acquire() below.
+                # bpo 38091：我们在这里遇到的tid链最终会导致一个固定点或循环，但不会到达“我”。这意味着我们实际上不会陷入僵局。如果其他线程位于下面acquire（）的开头，则可能发生这种情况。
                 return False
             seen.add(tid)
 
     def acquire(self):
         """
-        Acquire the module lock.  If a potential deadlock is detected,
-        a _DeadlockError is raised.
-        Otherwise, the lock is always acquired and True is returned.
+            Acquire the module lock.  If a potential deadlock is detected, a _DeadlockError is raised. Otherwise, the lock is always acquired and True is returned.
+            获取模块锁。如果检测到潜在的死锁，则会引发死锁错误。否则，将始终获取锁并返回True。
         """
         tid = _thread.get_ident()
         _blocking_on[tid] = self
@@ -113,8 +106,8 @@ class _ModuleLock:
         tid = _thread.get_ident()
         with self.lock:
             if self.owner != tid:
-                raise RuntimeError('cannot release un-acquired lock')
-            assert self.count > 0
+                raise RuntimeError('cannot release un-acquired lock')   # 无法释放未获取的锁
+            assert self.count > 0   # 断言： self.count 必须大于 0 可以确保后续的程序是运行在 count > 0的基础上的
             self.count -= 1
             if self.count == 0:
                 self.owner = None
@@ -123,12 +116,15 @@ class _ModuleLock:
                     self.wakeup.release()
 
     def __repr__(self):
+        # 类的__repr__属性： 与__str__类似， 主要用于在命令行中或者debug模式下，直接输入obj后的显示情况, 而__str__主要用于 print下的形式
         return '_ModuleLock({!r}) at {}'.format(self.name, id(self))
 
 
 class _DummyModuleLock:
-    """A simple _ModuleLock equivalent for Python builds without
-    multi-threading support."""
+    """
+        A simple _ModuleLock equivalent for Python builds without multi-threading support
+        一个简单的_ModuleLock等价物，用于不支持多线程的Python构建
+    """
 
     def __init__(self, name):
         self.name = name
@@ -162,12 +158,15 @@ class _ModuleLockManager:
 
 
 # The following two functions are for consumption by Python/import.c.
+# 以下两个函数供Python/import.c使用。
 
 def _get_module_lock(name):
-    """Get or create the module lock for a given module name.
-
-    Acquire/release internally the global import lock to protect
-    _module_locks."""
+    """
+        Get or create the module lock for a given module name.
+        获取或创建给定模块名的模块锁
+        Acquire/release internally the global import lock to protect _module_locks.
+        在内部获取/释放全局导入锁以保护_module_locks
+    """
 
     _imp.acquire_lock()
     try:
@@ -185,9 +184,8 @@ def _get_module_lock(name):
             def cb(ref, name=name):
                 _imp.acquire_lock()
                 try:
-                    # bpo-31070: Check if another thread created a new lock
-                    # after the previous lock was destroyed
-                    # but before the weakref callback was called.
+                    # bpo-31070: Check if another thread created a new lock after the previous lock was destroyed but before the weakref callback was called.
+                    # bpo-31070：检查是否有另一个线程在前一个锁被销毁后但在调用weakref回调之前创建了新锁
                     if _module_locks.get(name) is ref:
                         del _module_locks[name]
                 finally:
@@ -201,35 +199,32 @@ def _get_module_lock(name):
 
 
 def _lock_unlock_module(name):
-    """Acquires then releases the module lock for a given module name.
-
-    This is used to ensure a module is completely initialized, in the
-    event it is being imported by another thread.
+    """
+        Acquires then releases the module lock for a given module name.  
+        获取然后释放给定模块名的模块锁
+        This is used to ensure a module is completely initialized, in the event it is being imported by another thread.
+        这用于确保模块被另一个线程导入时完全初始化。
     """
     lock = _get_module_lock(name)
     try:
         lock.acquire()
     except _DeadlockError:
-        # Concurrent circular import, we'll accept a partially initialized
-        # module object.
+        # Concurrent circular import, we'll accept a partially initialized module object.    并发循环导入，将接受部分初始化的模块对象
         pass
     else:
         lock.release()
 
 # Frame stripping magic ###############################################
 def _call_with_frames_removed(f, *args, **kwds):
-    """remove_importlib_frames in import.c will always remove sequences
-    of importlib frames that end with a call to this function
-
-    Use it instead of a normal call in places where including the importlib
-    frames introduces unwanted noise into the traceback (e.g. when executing
-    module code)
+    """
+        remove_importlib_frames in import.c will always remove sequences of importlib frames that end with a call to this function
+        Use it instead of a normal call in places where including the importlib frames introduces unwanted noise into the traceback (e.g. when executing module code)
     """
     return f(*args, **kwds)
 
 
 def _verbose_message(message, *args, verbosity=1):
-    """Print the message to stderr if -v/PYTHONVERBOSE is turned on."""
+    """Print the message to stderr if -v/PYTHONVERBOSE is turned on.   如果启用了-v/PYTHONVERBOSE，则将消息打印到stderr"""
     if sys.flags.verbose >= verbosity:
         if not message.startswith(('#', 'import ')):
             message = '# ' + message
@@ -1016,12 +1011,10 @@ def _find_and_load(name, import_):
 
 
 def _gcd_import(name, package=None, level=0):
-    """Import and return the module based on its name, the package the call is
-    being made from, and the level adjustment.
-
-    This function represents the greatest common denominator of functionality
-    between import_module and __import__. This includes setting __package__ if
-    the loader did not.
+    """
+    根据name、package以及level确定模块并导入、返回。
+    此函数表示import_module和__import__之间的最大公分母。
+    如果加载程序没有设置 __package__, 会进行设置。
 
     """
     _sanity_check(name, package, level)
