@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+import optparse     # 用于配置命令行参数 比如 -c config.conf 这个config.conf可以不通过sys.argv来获取
 
 _logger = logging.getLogger(__name__)
 
@@ -33,7 +34,8 @@ def decimal_transfor(old_value, old_decimal, new_decimal):
     new_func = DECIMAL_DICT.get(int(new_decimal))
     # 这种用法只能在int方法上使用，其他三个函数都只有一个形参
     value = int(old_value, int(old_decimal))
-    return new_func(int(value))
+    # return new_func(int(value))
+    return DECIMAL_DICT.get(int(new_decimal))(int(value))
 
 
 def upper_and_lower_transfor(origin_str, type="", is_head_lower=False, is_body_change=False):
@@ -67,6 +69,7 @@ def upper_and_lower_transfor(origin_str, type="", is_head_lower=False, is_body_c
 
 if __name__ == "__main__":
     # 通过命令行传过来参数(注意，命令行调用python在该文件中只能使用相对路径,如果要使用绝对路径，需要将文件名使用字符串类型传入，不能直接在命令行中使用，因为存在空格)
+    # 可以通过 python 的命令解析模块 optparse 来进行
     # 通过sys.argv[]获取参数
     # 在sys.argv中，是由python3/python来作为开始的
     # eg: python3 test_main.py -c config.conf -d 12.2       其中sys.argv是在test_main.py中调用的
