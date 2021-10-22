@@ -232,7 +232,7 @@ def _verbose_message(message, *args, verbosity=1):
 
 
 def _requires_builtin(fxn):
-    """Decorator to verify the named module is built-in."""
+    """Decorator to verify the named module is built-in.    用于验证命名模块是否内置的装饰器"""
     def _requires_builtin_wrapper(self, fullname):
         if fullname not in sys.builtin_module_names:
             raise ImportError('{!r} is not a built-in module'.format(fullname),
@@ -243,7 +243,7 @@ def _requires_builtin(fxn):
 
 
 def _requires_frozen(fxn):
-    """Decorator to verify the named module is frozen."""
+    """Decorator to verify the named module is frozen.      用于验证命名模块是否已冻结的装饰程序"""
     def _requires_frozen_wrapper(self, fullname):
         if not _imp.is_frozen(fullname):
             raise ImportError('{!r} is not a frozen module'.format(fullname),
