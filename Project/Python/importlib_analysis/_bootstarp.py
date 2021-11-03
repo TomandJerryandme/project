@@ -80,7 +80,7 @@ class _ModuleLock:
 
     def acquire(self):
         """
-            Acquire the module lock.  If a potential deadlock is detected, a _DeadlockError is raised. Otherwise, the lock is always acquired and True is returned.
+            Acquire the module lock.  If a potential deadlock is detected, a _DeadlockError is raised. Otherwise, the lock is always acquired and True is returned.\n
             获取模块锁。如果检测到潜在的死锁，则会引发死锁错误。否则，将始终获取锁并返回True。
         """
         tid = _thread.get_ident()
@@ -122,7 +122,7 @@ class _ModuleLock:
 
 class _DummyModuleLock:
     """
-        A simple _ModuleLock equivalent for Python builds without multi-threading support
+        A simple _ModuleLock equivalent for Python builds without multi-threading support \n
         一个简单的_ModuleLock等价物，用于不支持多线程的Python构建
     """
 
@@ -162,9 +162,9 @@ class _ModuleLockManager:
 
 def _get_module_lock(name):
     """
-        Get or create the module lock for a given module name.
-        获取或创建给定模块名的模块锁
-        Acquire/release internally the global import lock to protect _module_locks.
+        Get or create the module lock for a given module name.\n
+        获取或创建给定模块名的模块锁\n
+        Acquire/release internally the global import lock to protect _module_locks.\n
         在内部获取/释放全局导入锁以保护_module_locks
     """
 
@@ -200,9 +200,9 @@ def _get_module_lock(name):
 
 def _lock_unlock_module(name):
     """
-        Acquires then releases the module lock for a given module name.  
-        获取然后释放给定模块名的模块锁
-        This is used to ensure a module is completely initialized, in the event it is being imported by another thread.
+        Acquires then releases the module lock for a given module name.  \n
+        获取然后释放给定模块名的模块锁 \n
+        This is used to ensure a module is completely initialized, in the event it is being imported by another thread. \n
         这用于确保模块被另一个线程导入时完全初始化。
     """
     lock = _get_module_lock(name)
@@ -232,7 +232,7 @@ def _verbose_message(message, *args, verbosity=1):
 
 
 def _requires_builtin(fxn):
-    """Decorator to verify the named module is built-in."""
+    """Decorator to verify the named module is built-in.    用于验证命名模块是否内置的装饰器"""
     def _requires_builtin_wrapper(self, fullname):
         if fullname not in sys.builtin_module_names:
             raise ImportError('{!r} is not a built-in module'.format(fullname),
@@ -243,7 +243,7 @@ def _requires_builtin(fxn):
 
 
 def _requires_frozen(fxn):
-    """Decorator to verify the named module is frozen."""
+    """Decorator to verify the named module is frozen.      用于验证命名模块是否已冻结的装饰程序"""
     def _requires_frozen_wrapper(self, fullname):
         if not _imp.is_frozen(fullname):
             raise ImportError('{!r} is not a frozen module'.format(fullname),
@@ -255,10 +255,11 @@ def _requires_frozen(fxn):
 
 # Typically used by loader classes as a method replacement.
 def _load_module_shim(self, fullname):
-    """Load the specified module into sys.modules and return it.
-
-    This method is deprecated.  Use loader.exec_module instead.
-
+    """
+        Load the specified module into sys.modules and return it.
+        加载特定模块到sys.modules并且返回
+        This method is deprecated.  Use loader.exec_module instead.
+        这个方法被弃用， 改用   loader.exec_module()
     """
     spec = spec_from_loader(fullname, self)
     if fullname in sys.modules:
