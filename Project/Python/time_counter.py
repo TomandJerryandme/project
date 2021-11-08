@@ -29,3 +29,11 @@ def time_counter(*out_args, **kwargs):
 @time_counter('ms')
 def say_hello(name):
     print("{Name} : Hello".format(Name=name))
+
+
+
+def _round(value, persion_value):
+    """
+        精度转换
+    """
+    return round(value, persion_value)
