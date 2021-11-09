@@ -1,11 +1,7 @@
 # python中logging的用法
 
-# import logging
-
 # logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(filename)s [line:%(lineno)d] - %(levelname)s: %(message)s')  # logging.basicConfig函数对日志的输出格式及方式做相关配置
 
-
-# python中logging的用法
 import os, sys
 import logging
 import threading
@@ -72,6 +68,11 @@ def init_getlogger():
     # file_format = logging.Formatter('%(asctime)s - %(filename)s [line:%(lineno)d] - %(levelname)s: %(message)s')
     # header.setFormatter(file_format)
     # return logger
+
+init_getlogger()
+
+def get_log(name):
+    return logging.getLogger(name)
 
 # logging.basicConfig(level=log_level, format='%(asctime)s %(filename)s[line: %(lineno)d] %(levelname)s %(message)s', datefmt='%a, %d %b %Y %H:%M:%S', filename='log.log', filemode='w')
 
