@@ -1,0 +1,221 @@
+"""
+    CanvasRenderingContext2D 对象提供了一组用来在画布上绘制的图形函数
+    参考文档
+    https://www.w3school.com.cn/jsref/dom_obj_canvasrenderingcontext2d.asp
+"""
+
+浏览器对象
+'''
+    
+    window的主要子对象
+        document            document对象表示当前页面
+        frames
+        history             history对象保存了浏览器的历史记录
+        location            location对象表示当前页面的URL信息
+        navigator           navigator对象表示浏览器的信息
+        screen              screen对象表示屏幕的信息, 即包含有关客户端显示屏幕的信息
+
+    window对象  非常重要且基础
+        window对象不但充当全局作用域： 所有的表达式都在当前环境中计算
+        而且表示浏览器窗口，但是目前最常用的是表示浏览器窗口的作用
+        window常用属性
+            innerheight： 返回窗口的文档显示区的高度
+            innerwidth：  返回窗口的文档显示区的宽度    
+            outerheight： 返回窗口的外部高度（整个浏览器的高度）
+            outerwidth：  返回窗口的外部宽度
+            pageXoffset： 设置或返回当前页面相对于窗口显示区左上角的X位置
+            pageYoffset： 设置或返回当前页面相对于窗口显示区左上角的Y位置
+            self：        返回对当前窗口的引用.等价于window属性
+            screenTop：   声明了窗口的左上角在屏幕上 的 X 坐标和 Y 的坐标
+        window常用方法
+            alert():            显示带有一段信息和一个确认按钮的警告框(具有中断一切的作用)
+            confirm():          显示带有一段消息以及确认按钮和取消按钮的对话框（确认返回 true  取消返回false）
+            prompt():           显示可提示用户输入的对话框（确认返回 输入的值）
+            setInterval():      照指定的周期(以毫秒计)来调用函数或计算表达式
+            setTimeout():       在指定的毫秒后调用函数或计算表达式(延时调用)
+            clearInterval():    取消由setInterval设置的timeout( 停止setInterval() )
+            clearTimeout():     取消由setTimeout方法设置的timeout (停止setTimeout())
+            close():            关闭当前浏览器窗口
+            blur():             失去焦点
+            focus():            获得焦点
+            print():            打印窗口内容
+
+            open():             打开一个新的浏览器窗口或查找一个已命名的窗口 window.open(URL,name,Features,replace)
+            open的参数(URL = "要打开的URL可以放文件目录", name = "给窗口起名字", Features = "特征值注意格式例如 width=100, height=100", replace = "这个参数没啥用")
+
+            scrollBy(X, Y):         按照指定的像素值来滚动的内容(第一个参数是滚动条向右滚动，第二个参数是滚动条向下滚动，方法执行:重复执行，值会累加)
+            scrollTo(X, Y):         把内容滚动到指定的坐标(X, Y)
+
+    Document对象    非常重要且基础
+        每个载入浏览器的 HTML 文档都会成为 Document 对象
+        Document 对象使我们可以从脚本中对 HTML 页面中的所有元素进行访问
+        document对象集合
+            all[]:                  提供对文档中所有 HTML 元素的访问
+                document.all[i]
+                document.all[name]
+                document.all.tags[tagname]
+            anchors[]:              返回对文档中所有 Anchor 对象的引用          document.anchors[]
+            applets:                返回对文档中所有 Applet 对象的引用
+            forms[]:                返回对文档中所有 Form 对象引用              document.forms[]
+            images[]:               返回对文档中所有 Image 对象引用             document.images[]
+            links[]:                返回对文档中所有 Area 和 Link 对象引用      document.links[]
+        document对象属性
+            body:                   提供对 <body> 元素的直接访问
+            cookie:                 设置或返回与当前文档有关的所有 cookie
+            domain:                 返回当前文档的域名
+            lastModified:           返回文档被最后修改的日期和时间
+            referrer:               返回载入当前文档的文档的 URL
+            title:                  当前文档的标题
+            URL:                    当前文档的URL
+        document对象方法
+            open():                 打开一个流，以收集来自任何 document.write() 或 document.writeln() 方法的输出        document.open(mimetype,replace)
+            close():                关闭由open()打开的流，并显示选定的数据
+            getElementById():       返回对拥有指定 id 的第一个对象的引用(obj)
+            getElementsByName():    返回带有指定名称的对象集合(Array(obj))
+            getElementsByTagName(): 返回带有指定标签名的对象集合(Array(obj))
+            getElementsByClassName(): 返回带有指定class的对象集合(Array(obj))  注意： 这里的class检索是class中只要包含检索内容即可 比如： class1: 'A B' class2: 'B' 那么 getElementsByClassName('B') 会检索到 class为1、2 的都会检索出来
+            write():                向文档写 HTML 表达式 或 JavaScript 代码
+            writeln():              等同于 write() 方法，不同的是在每个表达式之后写一个换行符
+            createElement():        创建一个节点 参数： 节点名如： style  div  form等
+
+    navigator对象
+        navigator对象记录了与浏览器本身相关的一些信息
+        navigator对象集合
+            plugins[]:              返回对文档中所有嵌入式对象的引用            该集合是一个 Plugin 对象的数组，其中的元素代表浏览器已经安装的插件.Plug-in 对象提供的是有关插件的信息，其中包括它所支持的 MIME 类型的列表
+        navigator对象属性
+            appCodeName:            返回浏览器的代码名
+            appMinorVersion:        返回浏览器的次级版本
+            appName:                返回浏览器的名称
+            appVersion:             返回浏览器的平台和版本信息
+            browserLanguage:        返回当前浏览器的语言
+            cookieEnabled:          返回指明浏览器中是否启用 cookie 的布尔值
+            cpuClass:               返回浏览器系统的 CPU 等级
+            onLine:                 返回指明系统是否处于脱机模式的布尔值
+            platform:               返回运行浏览器的操作系统平台
+            systemLanguage:         返回 OS 使用的默认语言
+            userAgent:              返回由客户机发送服务器的 user-agent 头部的值
+            userLanguage:           返回 OS 的自然语言设置
+        navigator对象方法
+            javaEnabled():          规定浏览器是否启用 Java
+            taintEnabled():         规定浏览器是否启用数据污点
+    
+    history对象
+        History 对象包含用户（在浏览器窗口中）访问过的 URL
+        History 对象是 window 对象的一部分，可通过 window.history 属性对其进行访问
+        history对象属性
+            length:                 返回浏览器历史列表中的 URL 数量
+        history对象方法
+            back():                 加载 history 列表中的前一个 URL     无参数
+            forward():              加载 history 列表中的下一个 URL     无参数
+            go():                   加载 history 列表中的某个具体页面   history.go(-2)  后退两次或者执行两次 back
+
+    location对象
+        Location 对象包含有关当前 URL 的信息
+        location对象属性
+            hash	                设置或返回从井号 (#) 开始的 URL（锚）
+            host	                设置或返回主机名和当前 URL 的端口号
+            hostname	            设置或返回当前 URL 的主机名
+            href	                设置或返回完整的 URL
+            pathname	            设置或返回当前 URL 的路径部分
+            port	                设置或返回当前 URL 的端口号
+            protocol	            设置或返回当前 URL 的协议
+            search	                设置或返回从问号 (?) 开始的 URL（查询部分）
+        location对象方法
+            assign()	            加载新的文档
+            reload()	            重新加载当前文档
+            replace()	            用新的文档替换当前文档
+
+    screen对象
+        screen对象包含有关客户端显示屏幕的信息
+        screen对象属性
+            availHeight	            返回显示屏幕的高度 (除 Windows 任务栏之外)
+            availWidth	            返回显示屏幕的宽度 (除 Windows 任务栏之外)
+            bufferDepth	            设置或返回调色板的比特深度
+            colorDepth	            返回目标设备或缓冲器上的调色板的比特深度
+            deviceXDPI	            返回显示屏幕的每英寸水平点数
+            deviceYDPI	            返回显示屏幕的每英寸垂直点数
+            fontSmoothingEnabled	返回用户是否在显示控制面板中启用了字体平滑
+            height	                返回显示屏幕的高度
+            logicalXDPI	            返回显示屏幕每英寸的水平方向的常规点数
+            logicalYDPI	            返回显示屏幕每英寸的垂直方向的常规点数
+            pixelDepth	            返回显示屏幕的颜色分辨率（比特每像素）
+            updateInterval	        设置或返回屏幕的刷新率
+            width	                返回显示器屏幕的宽度
+
+
+    其他元素对象
+        如各种html元素：canvas、form、等
+        属性或者方法(一下方法或者属性对于所有HTML元素都可以使用)
+            element.accessKey	                设置或返回元素的快捷键
+            element.appendChild()	            向元素添加新的子节点，作为最后一个子节点
+            element.attributes	                返回元素属性的 NamedNodeMap
+            element.childNodes	                返回元素子节点的 NodeList
+            element.className	                设置或返回元素的 class 属性
+            element.clientHeight	            返回元素的可见高度
+            element.clientWidth	                返回元素的可见宽度
+            element.cloneNode()	                克隆元素
+            element.compareDocumentPosition()	比较两个元素的文档位置
+            element.contentEditable	            设置或返回元素的文本方向
+            element.dir	                        设置或返回元素的内容是否可编辑
+            element.firstChild	                返回元素的首个子节点对象
+            element.firstElementChild           返回元素的首个元素子节点对象
+            element.getAttribute()	            返回元素节点的指定属性值
+            element.getAttributeNode()	        返回指定的属性节点
+            element.getElementsByTagName()	    返回拥有指定标签名的所有子元素的集合
+            element.getFeature()	            返回实现了指定特性的 API 的某个对象
+            element.getUserData()	            返回关联元素上键的对象
+            element.hasAttribute()	            如果元素拥有指定属性，则返回true，否则返回 false
+            element.hasAttributes()	            如果元素拥有属性，则返回 true，否则返回 false
+            element.hasChildNodes()	            如果元素拥有子节点，则返回 true，否则 false
+            element.id	                        设置或返回元素的 id
+            element.innerHTML	                设置或返回元素的内容    innerHTML - innerText - textContent: 后面两个只能设置元素的内容，无法设置HTML相关的属性，并且innerText不返回隐藏的文本，而另外一个全部返回
+            element.insertBefore()	            在指定的已有的子节点之前插入新节点
+            element.isContentEditable	        设置或返回元素的内容
+            element.isDefaultNamespace()	    如果指定的 namespaceURI 是默认的，则返回 true，否则返回 false
+            element.isEqualNode()	            检查两个元素是否相等
+            element.isSameNode()	            检查两个元素是否是相同的节点
+            element.isSupported()	            如果元素支持指定特性，则返回 true
+            element.lang	                    设置或返回元素的语言代码
+            element.lastChild	                返回元素的最后一个子元素
+            element.lastElementChild            返回元素的最后一个元素子节点对象
+            element.namespaceURI	            返回元素的 namespace URI
+            element.nextSibling	                返回位于相同节点树层级的下一个节点
+            element.nodeName	                返回元素的名称
+            element.nodeType	                返回元素的节点类型
+            element.nodeValue	                设置或返回元素值
+            element.normalize()	                合并元素中相邻的文本节点，并移除空的文本节点
+            element.offsetHeight	            返回元素的高度
+            element.offsetWidth	                返回元素的宽度
+            element.offsetLeft	                返回元素的水平偏移位置
+            element.offsetParent	            返回元素的偏移容器
+            element.offsetTop	                返回元素的垂直偏移位置
+            element.ownerDocument	            返回元素的根元素（文档对象）
+            element.parentNode	                返回元素的父节点
+            element.previousSibling	            返回位于相同节点树层级的前一个元素
+            element.removeAttribute()	        从元素中移除指定属性
+            element.removeAttributeNode()	    移除指定的属性节点，并返回被移除的节点
+            element.removeChild()	            从元素中移除子节点
+            element.replaceChild()	            替换元素中的子节点
+            element.scrollHeight	            返回元素的整体高度
+            element.scrollLeft	                返回元素左边缘与视图之间的距离
+            element.scrollTop	                返回元素上边缘与视图之间的距离
+            element.scrollWidth	                返回元素的整体宽度
+            element.setAttribute()	            把指定属性设置或更改为指定值
+            element.setAttributeNode()	        设置或更改指定属性节点
+            element.setIdAttribute()
+            element.setIdAttributeNode()
+            element.setUserData()	            把对象关联到元素上的键
+            element.style	                    设置或返回元素的 style 属性
+            element.tabIndex	                设置或返回元素的 tab 键控制次序
+            element.tagName	                    返回元素的标签名
+            element.textContent	                设置或返回节点及其后代的文本内容
+            element.title	                    设置或返回元素的 title 属性
+            element.toString()	                把元素转换为字符串
+            nodelist.item()	                    返回 NodeList 中位于指定下标的节点
+            nodelist.length	                    返回 NodeList 中的节点数
+'''
+
+DOM 事件 Event
+'''
+    a
+'''

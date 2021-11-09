@@ -27,14 +27,16 @@ window.onload = function () {
      *  xor :   使用异或操作对源图像与目标图像进行组合(取两个图像的不重合部分)
      *  https://www.w3school.com.cn/tags/html_ref_canvas.asp        canvas手册
      */
-    c.lineWidth = 0.1;                                                              // 设置或返回当前线条的宽度，以像素计   canvas属性
+    c.lineWidth = 0.2;                                                              // 设置或返回当前线条的宽度，以像素计   canvas属性
     c.lineCap = "round";                                                            // 设置或返回线条末端线帽的样式     canvas属性
     var bool = 0, t = 0;
     j.onmousemove = function (e) {
-        if (window.T) {
+        if (window.T) {                                         // 如果定时器T已经被设置
             if (D == 9) {
-                D = Math.random() * 15; f(1);
-            } clearTimeout(T);
+                D = Math.random() * 15;
+                f(1);
+            }
+            clearTimeout(T);                                                        // clearTimeout(): 可取消由 setTimeout() 方法设置的 timeout      DOM方法
         }
         X = e.pageX;
         Y = e.pageY;
@@ -43,19 +45,20 @@ window.onload = function () {
         A = X, B = Y;
         R = (e.pageX / W * 999 >> 0) / 999;
         r = (e.pageY / H * 999 >> 0) / 999;
-        U = e.pageX / H * 360 >> 0; D = 9;
+        U = e.pageX / H * 360 >> 0;
+        D = 9;
         g = 360 * Math.PI / 180;
-        T = setInterval(f = function (e) {
-            c.save();
+        T = setInterval(f = function (e) {                                          // setInterval(code{调用的方法或者代码},millisec{时间：ms}): 在指定的毫秒数后调用函数或计算表达式
+            c.save();                                                               // save(): 保存当前图像状态的一份拷贝   DOM方法     一般与restore()方法一起使用
             c.globalCompositeOperation = "source-over";
             if (e != 1) {
-                c.fillStyle = "rgba(0,0,0,0.02)";
+                c.fillStyle = "rgba(0,0,0,0.02)";                                   // fillStyle: 设置或返回用于填充绘画的颜色、渐变或模式  canvas 属性
                 c.fillRect(0, 0, W, H);
             }
-            c.restore();
+            c.restore();                                                            // restore: 从栈中弹出存储的图形状态并恢复 CanvasRenderingContext2D 对象的属性、剪切路径和变换矩阵的值   DOM方法
             i = 25;
             while (i--) {
-                c.beginPath();
+                c.beginPath();                                                      // beginPath(): 丢弃任何当前定义的路径并且开始一条新的路径 DOM方法
                 if (D > 450 || bool) {
                     if (!bool) {
                         bool = 1;
@@ -78,9 +81,14 @@ window.onload = function () {
                     c.lineTo(x, y)
                 }
                 c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)";
-                c.stroke(); a = x; b = y;
-            } U -= 0.5; A = X; B = Y;
-        }, 16);
+                c.stroke();
+                a = x;
+                b = y;
+            }
+            U -= 0.5;
+            A = X;
+            B = Y;
+        }, 20);
     };
     j.onkeydown = function (e) { a = b = 0; R += 0.05 };
     j.onmousemove({ pageX: 300, pageY: 290 })
