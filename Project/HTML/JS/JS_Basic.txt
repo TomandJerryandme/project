@@ -1,8 +1,4 @@
-"""
-    CanvasRenderingContext2D 对象提供了一组用来在画布上绘制的图形函数
-    参考文档
-    https://www.w3school.com.cn/jsref/dom_obj_canvasrenderingcontext2d.asp
-"""
+
 
 浏览器对象
 '''
@@ -54,7 +50,7 @@
                 document.all[i]
                 document.all[name]
                 document.all.tags[tagname]
-            anchors[]:              返回对文档中所有 Anchor 对象的引用          document.anchors[]
+            anchors[]:              返回对文档中所有 Anchor 对象的引用 比如：超链接          document.anchors[]
             applets:                返回对文档中所有 Applet 对象的引用
             forms[]:                返回对文档中所有 Form 对象引用              document.forms[]
             images[]:               返回对文档中所有 Image 对象引用             document.images[]
