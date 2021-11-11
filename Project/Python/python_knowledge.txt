@@ -1,0 +1,35 @@
+一、 python内置函数
+    input、print、raw_input
+
+    open、execfile、file
+
+    all、any
+
+    eval、round、sum、pow、cmp、abs、divmod
+
+    range、xrange、iter、next、slice、filter
+
+    format
+
+    reduce、map、zip
+
+    unicode
+
+    max、min、len
+
+    type、isinstance、issubclass
+
+    memoryview
+
+    __import__、reload
+
+    dict、set、frozenset、int、str、complex、tuple、bool、compile、float、long、list、bytearray
+
+    object、id、dir、repr、staticmethod、classmethod、hash、help、locals、vars、globals、super、callable、property
+    
+    oct、bin、hex、ord、chr、unichr
+    
+    sorted、enumerate、reverse
+    
+    getattr、hasattr、setattr、delattr
+    

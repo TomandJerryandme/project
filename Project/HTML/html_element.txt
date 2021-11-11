@@ -1,0 +1,138 @@
+记录各种HTML元素的属性或者控件
+
+标准属性
+    指以下四种属性基本上每一种HTML元素都会有
+    className	        设置或返回元素的 class 属性
+    dir	                设置或返回文本的方向
+    lang	            设置或返回元素的语言代码
+    title	            设置或返回元素的 title 属性
+
+
+常用HTML标签。
+    大部分标签都只是输入控件，需要视情况使用
+    <a>
+        Anchor对象
+        Anchor 对象表示 HTML 超链接
+        在 HTML 文档中 <a> 标签每出现一次，就会创建 Anchor 对象
+        锚可用于创建指向另一个文档的链接（通过 href 属性），或者创建文档内的书签（通过 name 属性）
+        对象属性
+            accessKey	                设置或返回访问一个链接的快捷键
+            charset	                    设置或返回被链接资源的字符集
+            coords	                    设置或返回逗号分隔列表，包含了图像映射中链接的坐标
+            href	                    设置或返回被链接资源的 URL
+            hreflang	                设置或返回被链接资源的语言代码
+            id	                        设置或返回一个链接的 id
+            innerHTML	                设置或返回一个链接的内容
+            name	                    设置或返回一个链接的名称
+            rel	                        设置或返回当前文档与目标 URL 之间的关系
+            rev	                        设置或返回目标 URL 与之间当前文档的关系
+            shape	                    设置或返回图像映射中某个链接的形状
+            tabIndex	                设置或返回某个链接的 Tab 键控制次序
+            target	                    设置或返回在何处打开链接
+            type	                    设置或返回被链接资源的 MIME 类型
+    <address>
+    <area>
+        对象属性
+            accessKey	                设置或返回访问某个区域的快捷键
+            alt	                        设置或返回当浏览器无法显示某个区域时的替换文字
+            coords	                    设置或返回图像映射中可点击区域的坐标
+            hash	                    设置或返回某个区域中 URL 的锚部分
+            host	                    设置或返回某个区域中 URL 的主机名和端口
+            href	                    设置或返回图像映射中链接的 URL
+            id	                        设置或返回某个区域的 id
+            noHref	                    设置或返回某个区域是否应是活动的还是非活动的
+            pathname	                设置或返回某个区域中的 URL 的路径名
+            protocol	                设置或返回某个区域中的 URL 的协议
+            search	                    设置或返回某个区域中 URL 的查询字符串部分
+            shape	                    设置或返回图像映射中某个区域的形状
+            tabIndex	                设置或返回某个区域的 tab 键控制次序
+            target	                    设置或返回在何处打开区域中的 link-URL
+            
+    <article>
+    <aside>
+    <audio>
+    <b>
+    <body>
+    <br>
+    <button>
+    <canvas>
+    <caption>
+    <cite>
+    <code>
+    <col>
+    <datalist>
+    <dd>    <del>
+    <details>
+    <dialog>
+    <div>
+    <dl>    <dt>
+    <fieldset>
+    <figure>
+    <footer>
+    <form>
+        注意： 在form表单提交时，只有有name属性的input才会被提交，没有name属性则会被忽略
+    <head>
+    <header>
+    <h1-6>
+    <hr>
+    <html>
+    <i> <iframe>
+    <img>
+    <input>
+        input标签按照type不同，可以分为多种类型
+            button  按钮
+            checkbox    多选框
+            color   调色板
+            date    日期控件-到天
+            datetime    日期控件-到秒
+            datetime-local
+            email   邮箱
+            file    文件
+            hidden  隐藏文本
+            image   图像
+            month   日期控件-到月
+            number  输入控件-只能输入数字（整数或者浮点数都行）
+            password    密码或者叫口令
+            radio   单选
+            range   滑块控件-可以实现类似占比的显示
+            reset   重置 - 一般与submit一起用于表单
+            search  搜索输入控件-返回需要搜索的值
+                autocomplete	    设置或返回 Search 字段的 autocomplete 属性值
+                autofocus	        设置或返回 Search 字段在页面加载后是否应自动获取焦点
+                defaultValue	    设置或返回 Search 字段的默认值
+                disabled	        设置或返回 Search 字段是否被禁用
+                form	            返回对包含 Search 字段的表单的引用
+                list	            返回对包含 Search 字段的 datalist 的引用
+                maxLength	        设置或返回 search 字段的 maxLength 属性值
+                name	            设置或返回 Search 字段的 name 属性值
+                pattern	            设置或返回 Search 字段的 pattern 属性值
+                placeholder	        设置或返回 Search 字段的 placeholder 属性值
+                readOnly	        设置或返回 Search 字段是否是只读的
+                required	        设置或返回在提交表单之前是否必须填写 Search 字段
+                size	            设置或返回 Search 字段的 size 属性值
+                step	            设置或返回 Search 字段的 step 属性值
+                type	            返回 Search 字段的表单元素类型
+                value	            设置或返回 Search 字段的 value 属性值
+            submit  提交
+            tel
+            text    文本输入
+            time    时间控件
+            url
+            week    日期控件-到周
+    <label>
+    <legend>
+    <li>
+    <link>
+    <map>       <mark>      <menu>      <menuitem>  <meta>      <meter>
+    <option>
+    <output>
+    <p>         <param>     <pre>       <progress>
+    <script>
+    <section>
+    <select>
+    <small>
+    <source>    <span>      <strong>    <sub>       <summary>
+    <table>     <tbody>     <td>        <th>        <tr>        <thead>     <textarea>
+    <time>      <title>
+    <ul>        <u>
+    <var>       <video>
