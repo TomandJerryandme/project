@@ -2,6 +2,9 @@ from hashlib import md5
 
 import configparser
 
+import psycopg2
+
+
 str = """客户:泰安市润利商贸有限公司/ 部门:济南大区/ 
 客户:西安昊瑞宏福商贸有限公司/ 部门:西北大区/ 
 客户:长治市屯留县城镇海莹副食批发部/ 部门:山西大区/ 

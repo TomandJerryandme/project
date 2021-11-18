@@ -1,35 +1,112 @@
 一、 python内置函数
     input、print、raw_input
+        input()
+        print()
+        raw_input()
 
     open、execfile、file
+        open()
+        execfile()
+        file()
 
     all、any
+        all(iterable)       iterable  ----  元组或者列表
+        any(iterable)       iterable  ----  元组或者列表
 
     eval、round、sum、pow、cmp、abs、divmod
+        eval(value, globals, locals)
+            expression      数值表达式
+            globals         变量作用域，全局命名空间，如果被提供，则必须是一个字典对象
+            locals          变量作用域，局部命名空间，如果被提供，可以是任何映射对
+        round()
+        sum()
+        pow()
+        cmp()
+        abs(value)
+        divmod()
 
     range、xrange、iter、next、slice、filter
+        range()
+        xrange()
+        iter()
+        next()
+        slice()
+        filter()
 
     format
 
     reduce、map、zip
+        reduce
+        map
+        zip
 
     unicode
 
     max、min、len
+        max
+        min
+        len
 
     type、isinstance、issubclass
+        type
+        isinstance
+        issubclass
 
     memoryview
 
     __import__、reload
+        reload
+        __import__
 
     dict、set、frozenset、int、str、complex、tuple、bool、compile、float、long、list、bytearray
+        dict
+        set
+        frozenset
+        int
+        str
+        tuple
+        list
+        complex
+        bool
+        complie
+        float
+        long
+        bytearray
 
     object、id、dir、repr、staticmethod、classmethod、hash、help、locals、vars、globals、super、callable、property
+        object
+        id
+        dir
+        repr
+        staticmethod
+        classmethod
+        hash
+        help
+        locals
+        vars
+        globals
+        super
+        callable
+        property
     
     oct、bin、hex、ord、chr、unichr
+        进制转换的函数大部分的参数都是10进制的整数
+        oct
+        bin
+        hex
+        
+    ord、chr、unichr
+        ord(char)       char -- 字符
+        chr()
+        unichr()
     
     sorted、enumerate、reverse
+        sorted
+        enumerate
+        reverse
     
     getattr、hasattr、setattr、delattr
-    
+        getattr
+        hasattr
+        setattr
+        delattr
