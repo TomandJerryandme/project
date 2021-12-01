@@ -57,7 +57,7 @@ window.onload = function () {
             }
             c.restore();                                                            // restore: 从栈中弹出存储的图形状态并恢复 CanvasRenderingContext2D 对象的属性、剪切路径和变换矩阵的值   DOM方法
             i = 25;
-            while (i--) {
+            while (i--) {                                                           // 如果 这里 不是 i-- 不会进行绘制
                 c.beginPath();                                                      // beginPath(): 丢弃任何当前定义的路径并且开始一条新的路径 DOM方法
                 if (D > 450 || bool) {
                     if (!bool) {
@@ -77,18 +77,18 @@ window.onload = function () {
                 x = (R - r) * C(t) + D * C(q) + (A + (X - A) * (i / 25)) + (r - R);
                 y = (R - r) * S(t) - D * S(q) + (B + (Y - B) * (i / 25));
                 if (a) {
-                    c.moveTo(a, b);
-                    c.lineTo(x, y)
+                    c.moveTo(a, b);                                                 // 设置当前位置并开始一条新的子路径 - 绘制  canvas方法  画笔移动位置到(a, b)坐标
+                    c.lineTo(x, y)                                                  // 为当前的子路径添加一条直线线段 - 绘制直线    canvas方法  画笔从当前位置划线到 (x, y)坐标
                 }
-                c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)";
-                c.stroke();
+                c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)";            // 指定了用于画笔（绘制）路径的颜色、模式和渐变 canvas方法  其中 hsla()是颜色选择器
+                c.stroke();                                                         // 沿着当前路径绘制或画一条直线 canvas方法
                 a = x;
                 b = y;
             }
             U -= 0.5;
             A = X;
             B = Y;
-        }, 20);
+        }, 20);                                                                     // 每20毫秒执行一次
     };
     j.onkeydown = function (e) { a = b = 0; R += 0.05 };
     j.onmousemove({ pageX: 300, pageY: 290 })

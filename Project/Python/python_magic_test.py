@@ -1,8 +1,8 @@
 # 参考文档
 # https://blog.csdn.net/wangjianno2/article/details/49050107
+# 注： 在python中，一切都是对象，方法也是对象
 
-
-class MagicClass():
+class MagicClass(object):
     '''
         该类用于演示python的各种魔术变量与魔术方法
         并不是每个魔法方法都要实现，魔法方法定义后只是看该种对象对魔法方法的相关操作的响应而已
@@ -142,4 +142,15 @@ class MagicClass():
         super().__init__()
 
     def __del__(self):
+        pass
+
+    def __copy__(self):
+        # 复制时 复制的对象的定义
+        pass
+
+    def __call__(self, *kwargs):
+        """
+            该方法可以使对象像方法那样调用
+            obj(*kwrags)
+        """
         pass
