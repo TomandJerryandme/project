@@ -2,6 +2,9 @@ from hashlib import md5
 
 import configparser
 
+import psycopg2
+
+
 str = """客户:泰安市润利商贸有限公司/ 部门:济南大区/ 
 客户:西安昊瑞宏福商贸有限公司/ 部门:西北大区/ 
 客户:长治市屯留县城镇海莹副食批发部/ 部门:山西大区/ 
@@ -75,9 +78,20 @@ str = """客户:泰安市润利商贸有限公司/ 部门:济南大区/
 客户:南宁市远林冷冻食品经营部/ """
 
 
-str_list = str.split('\n')
-for source_str in str_list:
-    # 054785475d3ad372c65f249c16191b29
-    source = md5(source_str.encode('utf-8')).hexdigest()
-    if source == '054785475d3ad372c65f249c16191b29':
-        print(source_str)
+# str_list = str.split('\n')
+# for source_str in str_list:
+#     # 054785475d3ad372c65f249c16191b29
+#     source = md5(source_str.encode('utf-8')).hexdigest()
+#     if source == '054785475d3ad372c65f249c16191b29':
+#         print(source_str)
+
+
+def trans(string):
+    list_str = string.split("\\x")
+    for x in list_str:
+        if x:
+            print(int(x, 16))
+            print(chr(int(x, 16)))
+            # print(chr(int(x, 16)), end='')
+
+trans(input())

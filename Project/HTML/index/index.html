@@ -1,0 +1,68 @@
+<!-- 
+    ion-icon 图标获取地址
+    https://ionic.io/ionicons
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=divice-width, initial-scale=1.0">
+    <title>How to Make Website with Video Background</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">Logo</a>
+        <div class="righSide">
+            <div class="btns dayNight">
+                <!-- 图标需要下载 需要联网 -->
+                <ion-icon name="moon-outline"></ion-icon>
+                <ion-icon name="sunny-outline"></ion-icon>
+            </div>
+            <div class="btns menuToggle">
+                <ion-icon name="menu-outline"></ion-icon>
+                <ion-icon name="close-outline"></ion-icon>
+            </div>
+        </div>
+    </header>
+    <section class="main">
+        <video src="../src/video.mp4" autoplay loop muted type="mp4"></video>
+        <img src="../src/mask.jpg" class="mask">
+        <h2>Ocean</h2>
+        <p class="copyrightText">Online copyrightText</p>
+        <ul class="sci">
+            <li><a href="#"><ion-icon name="logo-wechat"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-twitter"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-facebook"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-instagram"></ion-icon></a></li>
+        </ul>
+    </section>
+
+    <!-- Sidebar Navigation -->
+    <ul class="navigation">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Package</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        // zai document.querySelector()中，如果不加'.'，表示找的是标签，加上表示找class
+        let dayNight = document.querySelector('.dayNight');
+        let menuToggle = document.querySelector('.menuToggle');
+        let body = document.querySelector('body');
+        let navigation = document.querySelector('.navigation');
+        dayNight.onclick = function(){
+            body.classList.toggle('dark')
+            // active 只是一个class开关，并不是属性 当class为active时，适用于css里的active修饰
+            dayNight.classList.toggle('active');
+        }
+        menuToggle.onclick = function(){
+            menuToggle.classList.toggle('active');
+            navigation.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

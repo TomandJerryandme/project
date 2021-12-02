@@ -1,0 +1,50 @@
+<!-- 
+    ion-icon 图标获取地址
+    https://ionic.io/ionicons
+ -->
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=divice-width, initial-scale=1.0">
+     <title>How to Make Website with Video Background</title>
+     <link rel="stylesheet" href="../CSS/glass_style.css">
+ </head>
+ <body>
+     <ul>
+         <li><a href="#"><ion-icon name="home-outline"></ion-icon></a></li>
+         <li><a href="#"><ion-icon name="person-circle-outline"></ion-icon></a></li>
+         <li class="active"><a href="#"><ion-icon name="add-circle-outline"></ion-icon></a></li>
+         <li><a href="#"><ion-icon name="airplane-outline"></ion-icon></a></li>
+         <li><a href="#"><ion-icon name="play-outline"></ion-icon></a></li>
+         
+         <div id="marker"></div>
+     </ul>
+     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+     <script>
+         let marker = document.querySelector('#marker');
+         let list = document.querySelectorAll('ul li');
+
+         function moveIndicator(e){
+             marker.style.left = e.offsetLeft+'px';
+             marker.style.width = e.offsetWidth+'px';
+         }
+         list.forEach(link => {
+             link.addEventListener('mousemove', (e) => {
+                 moveIndicator(e.target);
+             })
+         })
+
+         function activeLink() {
+             list.forEach((item) => 
+             item.classList.remove('active'));
+             this.classList.add('active');
+         }
+
+         list.forEach((item) => 
+         item.addEventListener('mouseover', activeLink));
+     </script>
+ </body>
+ </html>

@@ -4,3 +4,90 @@
     https://www.w3school.com.cn/jsref/dom_obj_canvasrenderingcontext2d.asp
 """
 
+CanvasRenderingContext2D 对象的属性
+
+    fillStyle 属性
+        用来填充路径的当前的颜色、模式或渐变
+        这个属性可以设置为一个字符串或者一个 CanvasGradient 对象 或 CanvasPattern 对象
+        字符串：                                它被解析为一个 CSS 颜色值并且用来进行实心填充
+        CanvasGradient 或 CanvasPattern 对象：  通过使用指定的渐变或模式来完成填充
+
+    globalAlpha 属性
+        指定在画布上绘制的内容的不透明度。这个值的范围在 0.0（完全透明）和 1.0（完全不透明）之间。默认值为 1.0
+
+    globalCompositeOperation 属性
+        指定颜色如何与画布上已有的颜色组合（合成）
+            "copy"	                    只绘制新图形，删除其他所有内容
+            "darker"	                在图形重叠的地方，颜色由两个颜色值相减后决定
+            "destination-atop"	        已有的内容只有在它和新的图形重叠的地方保留。新图形绘制于内容之后
+            "destination-in"	        在新图形以及已有画布重叠的地方，已有内容都保留。所有其他内容成为透明的
+            "destination-out"	        在已有内容和新图形不重叠的地方，已有内容保留。所有其他内容成为透明
+            "destination-over"	        新图形绘制于已有内容的后面
+            "lighter"	                在图形重叠的地方，颜色由两种颜色值的加值来决定
+            "source-atop"	            只有在新图形和已有内容重叠的地方，才绘制新图形
+            "source-in"	                在新图形以及已有内容重叠的地方，新图形才绘制。所有其他内容成为透明
+            "source-out"	            只有在和已有图形不重叠的地方，才绘制新图形
+            "source-over"	            新图形绘制于已有图形的顶部。这是默认的行为
+            "xor"	                    在重叠和正常绘制的其他地方，图形都成为透明的
+
+    lineCap 属性
+        指定线条的末端如何绘制
+            合法的值是 "butt"、"round" 和 "square" 默认 'butt'
+            "butt"	        这个默认值指定了线段应该没有线帽。线条的末点是平直的而且和线条的方向正交，这条线段在其端点之外没有扩展
+            "round"	        这个值指定了线段应该带有一个半圆形的线帽，半圆的直径等于线段的宽度，并且线段在端点之外扩展了线段宽度的一半
+            "square"	    这个值表示线段应该带有一个矩形线帽。这个值和 "butt" 一样，但是线段扩展了自己的宽度的一半
+
+    lineJoin 属性
+        指定两条线条如何连接
+            合法的值是 "round"、"bevel" 和 "miter"。默认值是 "miter"
+            "miter"         说明了两条线段的外边缘一直扩展到它们相交
+            "round"         说明顶点的外边缘应该和一个填充的弧接合，这个弧的直径等于线段的宽度
+            "bevel"         说明顶点的外边缘应该和一个填充的三角形相交
+
+    lineWidth 属性
+        指定了画笔（绘制线条）操作的线条宽度。默认值是 1.0，并且这个属性必须大于 0.0。较宽的线条在路径上居中，每边有线条宽的一半
+
+    miterLimit 属性
+        当 lineJoin 属性为 "miter" 的时候，这个属性指定了斜连接长度和线条宽度的最大比率
+        当 lineJoin 属性为其他时，这个属性不起效
+
+    shadowBlur 属性
+        指定羽化阴影的程度。默认值是 0
+
+    shadowColor 属性
+        把阴影的颜色指定为一个 CSS 字符串或 Web 样式字符串，并且可以包含一个 alpha 部分来表示透明度。默认值是 black
+
+    shadowOffsetX, shadowOffsetY 属性
+        指定阴影的水平偏移和垂直偏移。较大的值使得阴影化的对象似乎漂浮在背景的较高位置上。默认值是 0
+
+    strokeStyle 属性
+        指定了用于画笔（绘制）路径的颜色、模式和渐变
+        这个属性可能是一个字符串，或者一个 CanvasGradient 对象 或 CanvasPattern 对象
+        如果是一个字符串，它被解析为一个 CSS 颜色值，并且画笔用所得的实色来绘制
+        如果这个属性的值是一个 CanvasGradient 对象或 CanvasPattern 对象，画笔使用这个渐变或模式来实现
+
+    CanvasRenderingContext2D 对象的方法
+        arc()	                        用一个中心点和半径，为一个画布的当前子路径添加一条弧线
+        arcTo()	                        使用目标点和一个半径，为当前的子路径添加一条弧线
+        beginPath()	                    开始一个画布中的一条新路径（或者子路径的一个集合）
+        bezierCurveTo()	                为当前的子路径添加一个三次贝塞尔曲线
+        clearRect()	                    在一个画布的一个矩形区域中清除掉像素
+        clip()	                        使用当前路径作为连续绘制操作的剪切区域
+        closePath()	                    如果当前子路径是打开的，就关闭它
+        createLinearGradient()	        返回代表线性颜色渐变的一个 CanvasGradient 对象
+        createPattern()	                返回代表贴图图像的一个 CanvasPattern 对象
+        createRadialGradient()	        返回代表放射颜色渐变的一个 CanvasGradient 对象
+        drawImage()	                    绘制一幅图像
+        fill()	                        使用指定颜色、渐变或模式来绘制或填充当前路径的内部
+        fillRect()	                    绘制或填充一个矩形
+        lineTo()	                    为当前的子路径添加一条直线线段
+        moveTo()	                    设置当前位置并开始一条新的子路径
+        quadraticCurveTo()	            为当前路径添加一条贝塞尔曲线
+        rect()	                        为当前路径添加一条矩形子路径
+        restore()	                    为画布重置为最近保存的图像状态
+        rotate()	                    旋转画布
+        save()	                        保存 CanvasRenderingContext2D 对象的属性、剪切区域和变换矩阵
+        scale()	                        标注画布的用户坐标系统
+        stroke()	                    沿着当前路径绘制或画一条直线
+        strokeRect()	                绘制（但不填充）一个矩形
+        translate()	                    转换画布的用户坐标系统
