@@ -1,2 +1,349 @@
 # CSS 的一些比较基础的知识
 # 比如说各种属性的解释，各种定位的方式等
+CSS属性按照修饰对象分为多种
+    动画属性
+    边框和轮廓属性
+    背景属性
+    盒子属性
+    颜色属性
+    内边距属性
+    外边距属性
+    媒体页面内容属性
+    尺寸属性
+    弹性盒子模型属性
+    字体属性
+    内容生成属性
+    网格属性
+    超链接属性
+    线框属性
+    列表属性
+    字幕属性
+    多列属性
+    页面媒体属性
+    定位属性
+    分页属性
+    Ruby属性
+    语音属性
+    表格属性
+    文本属性
+    2D或者3D属性
+    过渡属性
+    用户外观属性
+
+以下对每种属性的各个属性进行解释
+    动画属性
+        @keyframes	                        定义一个动画,@keyframes定义的动画名称用来被animation-name所使用
+            @keyframes animationname    # 必需  animationname 定义animation的名称，用于引用
+            {
+                keyframes-selector      # 必需  0-100% 或者 from(0%) to(100%)
+                {
+                    css-styles;         # 必需
+                }
+            }
+        animation	                        复合属性。检索或设置对象所应用的动画特效
+        animation-name	                    检索或设置对象所应用的动画名称, 必须与规则@keyframes配合使用 因为动画名称由@keyframes定义
+        animation-duration	                检索或设置对象动画的持续时间
+        animation-timing-function	        检索或设置对象动画的过渡类型
+        animation-delay	                    检索或设置对象动画的延迟时间
+        animation-iteration-count	        检索或设置对象动画的循环次数
+        animation-direction	                检索或设置对象动画在循环中是否反向运动
+        animation-play-state	            检索或设置对象动画的状态
+    边框和轮廓属性
+        border	                            复合属性。设置对象边框的特性
+        border-bottom	                    复合属性。设置对象底部边框的特性
+        border-bottom-color	                设置或检索对象的底部边框颜色。
+        border-bottom-style	                设置或检索对象的底部边框样式
+        border-bottom-width	                设置或检索对象的底部边框宽度
+        border-color	                    置或检索对象的边框颜色
+        border-left	                        复合属性。设置对象左边边框的特性
+        border-left-color	                设置或检索对象的左边边框颜色
+        border-left-style	                设置或检索对象的左边边框样式
+        border-left-width	                设置或检索对象的左边边框宽度-
+        border-right	                    复合属性。设置对象右边边框的特性
+        border-right-color	                设置或检索对象的右边边框颜色
+        border-right-style	                设置或检索对象的右边边框样式
+        border-right-width	                设置或检索对象的右边边框宽度
+        border-style	                    设置或检索对象的边框样式
+        border-top	                        复合属性。设置对象顶部边框的特性
+        border-top-color	                设置或检索对象的顶部边框颜
+        border-top-style	                设置或检索对象的顶部边框样式
+        border-top-width	                设置或检索对象的顶部边框宽度
+        border-width	                    设置或检索对象的边框宽度
+        outline	                            复合属性。设置或检索对象外的线条轮廓
+        outline-color	                    设置或检索对象外的线条轮廓的颜色
+        outline-style	                    设置或检索对象外的线条轮廓的样式
+        outline-width	                    设置或检索对象外的线条轮廓的宽度
+        border-bottom-left-radius	        设置或检索对象的左下角圆角边框。提供2个参数，2个参数以空格分隔，每个参数允许设置1个参数值，第1个参数表示水平半径，第2个参数表示垂直半径，如第2个参数省略，则默认等于第1个
+        border-bottom-right-radius	        设置或检索对象的右下角圆角边框
+        border-image	                    设置或检索对象的边框样式使用图像来填充
+        border-image-outset	                规定边框图像超过边框的量
+        border-image-repeat	                规定图像边框是否应该被重复（repeated）、拉伸（stretched）或铺满（rounded）
+        border-image-slice	                规定图像边框的向内偏移
+        border-image-source	                规定要使用的图像，代替 border-style 属性中设置的边框样式
+        border-image-width	                规定图像边框的宽度
+        border-radius	                    设置或检索对象使用圆角边框
+        border-top-left-radius	            定义左上角边框的形状
+        border-top-right-radius	            定义右上角边框的形状
+        box-decoration-break	            规定行内元素被折行
+        box-shadow	                        向方框添加一个或多个阴影
+    背景属性
+        background	                        复合属性。设置对象的背景特性
+        background-attachment	            设置或检索背景图像是随对象内容滚动还是固定的。必须先指定background-image属性
+        background-color	                设置或检索对象的背景颜色
+        background-image	                设置或检索对象的背景图像
+        background-position	                设置或检索对象的背景图像位置。必须先指定background-image属性
+        background-repeat	                设置或检索对象的背景图像如何铺排填充。必须先指定background-image属性
+        background-clip	                    指定对象的背景图像向外裁剪的区域
+        background-origin	                S设置或检索对象的背景图像计算background-position时的参考原点(位置)
+        background-size	                    检索或设置对象的背景图像的尺寸大小
+    盒子属性
+        overflow-x	                        如果内容溢出了元素内容区域，是否对内容的左/右边缘进行裁剪
+        overflow-y	                        如果内容溢出了元素内容区域，是否对内容的上/下边缘进行裁剪
+        overflow-style	                    规定溢出元素的首选滚动方法
+        rotation	                        围绕由 rotation-point 属性定义的点对元素进行旋转
+        rotation-point	                    定义距离上左边框边缘的偏移点
+    颜色属性
+        color-profile	                    允许使用源的颜色配置文件的默认以外的规范
+        opacity	                            设置一个元素的透明度级别
+        rendering-intent	                允许超过默认颜色配置文件渲染意向的其他规范
+    内边距属性
+        padding	                            在一个声明中设置所有填充属性
+        padding-bottom	                    设置元素的底填充
+        padding-left	                    设置元素的左填充
+        padding-right	                    设置元素的右填充
+        padding-top	                        设置元素的顶部填充
+    外边距属性
+        margin	                            在一个声明中设置所有外边距属性
+        margin-bottom	                    设置元素的下外边距
+        margin-left	                        设置元素的左外边距
+        margin-right	                    设置元素的右外边距
+        margin-top	                        设置元素的上外边距
+    媒体页面内容属性
+    尺寸属性
+        height	                            设置元素的高度
+        max-height	                        设置元素的最大高度
+        max-width	                        设置元素的最大宽度
+        min-height	                        设置元素的最小高度
+        min-width	                        设置元素的最小宽度
+        width	                            设置元素的宽度
+    弹性盒子模型属性
+        flex	                            复合属性。设置或检索弹性盒模型对象的子元素如何分配空间
+        flex-grow	                        设置或检索弹性盒的扩展比率
+        flex-shrink	                        设置或检索弹性盒的收缩比率
+        flex-basis	                        设置或检索弹性盒伸缩基准值
+        flex-flow	                        复合属性。设置或检索弹性盒模型对象的子元素排列方式
+        flex-direction	                    该属性通过定义flex容器的主轴方向来决定felx子项在flex容器中的位置
+        flex-wrap	                        该属性控制flex容器是单行或者多行，同时横轴的方向决定了新行堆叠的方向
+        align-content	                    在弹性容器内的各项没有占用交叉轴上所有可用的空间时对齐容器内的各项（垂直）
+        align-items	                        定义flex子项在flex容器的当前行的侧轴（纵轴）方向上的对齐方式
+        align-self	                        定义flex子项单独在侧轴（纵轴）方向上的对齐方式
+        justify-content	                    设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式
+        order	                            设置或检索弹性盒模型对象的子元素出现的順序
+        box-align	                        指定如何对齐一个框的子元素
+        box-direction	                    指定在哪个方向，显示一个框的子元素
+        box-flex	                        指定一个框的子元素是否是灵活的或固定的大小
+        box-flex-group	                    指派灵活的元素到Flex组
+        box-lines	                        每当它在父框的空间运行时，是否指定将再上一个新的行列
+        box-ordinal-group	                指定一个框的子元素的显示顺序
+        box-orient	                        指定一个框的子元素是否在水平或垂直方向应铺设
+        box-pack	                        指定横向盒在垂直框的水平位置和垂直位置
+    字体属性
+        font	                            在一个声明中设置所有字体属性
+        font-family	                        规定文本的字体系列
+        font-size	                        规定文本的字体尺寸
+        font-style	                        规定文本的字体样式
+        font-variant	                    规定文本的字体样式
+        font-weight	                        规定字体的粗细
+        @font-face	                        一个规则，允许网站下载并使用其他超过"Web- safe"字体的字体
+        font-size-adjust	                为元素规定 aspect 值
+        font-stretch	                    收缩或拉伸当前的字体系列
+    内容生成属性
+    网格属性
+    超链接属性
+    线框属性
+    列表属性
+        list-style	                        在一个声明中设置所有的列表属性
+        list-style-image	                将图象设置为列表项标记
+        list-style-position	                设置列表项标记的放置位置
+        list-style-type	                    设置列表项标记的类型
+    字幕属性
+    多列属性
+    页面媒体属性
+    定位属性
+        bottom                              设置定位元素下外边距边界与其包含块下边界之间的偏移
+        left	                            设置定位元素左外边距边界与其包含块左边界之间的偏移
+        right	                            设置定位元素右外边距边界与其包含块右边界之间的偏移
+        top	                                设置定位元素的上外边距边界与其包含块上边界之间的偏移
+        以上四种属性都是决定元素四周的一些控制, 并且都只有一个参数
+                    auto	                        默认值。通过浏览器计算底部的位置
+                    %	                            设置以包含元素的百分比计的底边位置。可使用负值
+                    length	                        使用 px、cm 等单位设置元素的底边位置。可使用负值
+                    inherit	                        规定应该从父元素继承 bottom 属性的值
+        clear	                            规定元素的哪一侧不允许其他浮动元素
+                    left	                        在左侧不允许浮动元素
+                    right	                        在右侧不允许浮动元素
+                    both	                        在左右两侧均不允许浮动元素
+                    none	                        默认值。允许浮动元素出现在两侧
+                    inherit	                        规定应该从父元素继承 clear 属性的值
+        clip	                            剪裁绝对定位元素
+        cursor	                            规定要显示的光标的类型（形状）
+                    url	                            需使用的自定义光标的 URL。注释：请在此列表的末端始终定义一种普通的光标，以防没有由 URL 定义的可用光标
+                    default	                        默认光标（通常是一个箭头
+                    auto	                        默认。浏览器设置的光标
+                    crosshair	                    光标呈现为十字线
+                    pointer	                        光标呈现为指示链接的指针（一只手
+                    move	                        此光标指示某对象可被移动
+                    e-resize	                    此光标指示矩形框的边缘可被向右（东）移动
+                    ne-resize	                    此光标指示矩形框的边缘可被向上及向右移动（北/东）
+                    nw-resize	                    此光标指示矩形框的边缘可被向上及向左移动（北/西）
+                    n-resize	                    此光标指示矩形框的边缘可被向上（北）移动
+                    se-resize	                    此光标指示矩形框的边缘可被向下及向右移动（南/东）
+                    sw-resize	                    此光标指示矩形框的边缘可被向下及向左移动（南/西）
+                    s-resize	                    此光标指示矩形框的边缘可被向下移动（南）
+                    w-resize	                    此光标指示矩形框的边缘可被向左移动（西）
+                    text	                        此光标指示文本
+                    wait	                        此光标指示程序正忙（通常是一只表或沙漏）
+                    help	                        此光标指示可用的帮助（通常是一个问号或一个气球）
+        display	                            规定元素应该生成的框的类型
+                    none	                        此元素不会被显示
+                    block	                        此元素将显示为块级元素，此元素前后会带有换行符
+                    inline	                        默认。此元素会被显示为内联元素，元素前后没有换行符
+                    inline-block	                行内块元素。（CSS2.1 新增的值
+                    list-item	                    此元素会作为列表显示
+                    run-in	                        此元素会根据上下文作为块级元素或内联元素显示
+                    compact	                        CSS 中有值 compact，不过由于缺乏广泛支持，已经从 CSS2.1 中删除
+                    marker	                        CSS 中有值 marker，不过由于缺乏广泛支持，已经从 CSS2.1 中删除
+                    table	                        此元素会作为块级表格来显示（类似 <table>），表格前后带有换行符
+                    inline-table	                此元素会作为内联表格来显示（类似 <table>），表格前后没有换行符
+                    table-row-group	                此元素会作为一个或多个行的分组来显示（类似 <tbody>）
+                    table-header-group	            此元素会作为一个或多个行的分组来显示（类似 <thead>）
+                    table-footer-group	            此元素会作为一个或多个行的分组来显示（类似 <tfoot>）
+                    table-row	                    此元素会作为一个表格行显示（类似 <tr>）
+                    table-column-group	            此元素会作为一个或多个列的分组来显示（类似 <colgroup>）
+                    table-column	                此元素会作为一个单元格列显示（类似 <col>
+                    table-cell	                    此元素会作为一个表格单元格显示（类似 <td> 和 <th>
+                    table-caption	                此元素会作为一个表格标题显示（类似 <caption>
+                    inherit	                        规定应该从父元素继承 display 属性的值
+        float	                            规定框是否应该浮动
+                    left	                        元素向左浮动
+                    right	                        元素向右浮动
+                    none	                        默认值。元素不浮动，并会显示在其在文本中出现的位置
+                    inherit	                        规定应该从父元素继承 float 属性的值
+        
+        overflow                            规定当内容溢出元素框时发生的事情
+        position	                        规定元素的定位类型
+                    absolute	                    生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。元素的位置通过 "left", "top", "right" 以及 "bottom" 属性进行规定
+                    fixed	                        生成固定定位的元素，相对于浏览器窗口进行定位。元素的位置通过 "left", "top", "right" 以及 "bottom" 属性进行规定
+                    relative	                    生成相对定位的元素，相对于其正常位置进行定位。因此，"left:20" 会向元素的 LEFT 位置添加 20 像素
+                    static	                        默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）
+                    sticky	                        粘性定位，该定位基于用户滚动的位置。它的行为就像 position:relative; 而当页面滚动超出目标区域时，它的表现就像 position:fixed;，它会固定在目标位置
+                    inherit	                        规定应该从父元素继承 position 属性的值
+                    initial	                        设置该属性为默认值，详情查看 CSS initial 关键字
+        visibility	                        规定元素是否可见
+                    visible	                        默认值。元素是可见的
+                    hidden	                        元素是不可见的
+                    collapse	                    当在表格元素中使用时，此值可删除一行或一列，但是它不会影响表格的布局。被行或列占据的空间会留给其他内容使用。如果此值被用在其他的元素上，会呈现为 "hidden"
+                    inherit	                        规定应该从父元素继承 visibility 属性的值
+        z-index	                            设置元素的堆叠顺序（一般三种取值 auto、value、继承）
+    分页属性
+    Ruby属性
+    语音属性
+    表格属性
+    文本属性
+        color	                            设置文本的颜色
+        direction	                        规定文本的方向 / 书写方向
+        letter-spacing	                    设置字符间距
+        line-height	                        设置行高
+        text-align	                        规定文本的水平对齐方式
+        text-decoration	                    规定添加到文本的装饰效果
+        text-indent	                        规定文本块首行的缩进
+        text-transform	                    控制文本的大小写
+        unicode-bidi	                     
+        vertical-align	                    设置元素的垂直对齐方式
+        white-space	                        设置怎样给一元素控件留白
+        word-spacing	                    设置单词间距
+        text-emphasis	                    向元素的文本应用重点标记以及重点标记的前景色。
+        hanging-punctuation	                指定一个标点符号是否可能超出行框
+        punctuation-trim	                指定一个标点符号是否要去掉
+        text-align-last	                    当 text-align 设置为 justify 时，最后一行的对齐方式。
+        text-justify	                    当 text-align 设置为 justify 时指定分散对齐的方式。
+        text-outline	                    设置文字的轮廓。
+        text-overflow	                    指定当文本溢出包含的元素，应该发生什么
+        text-shadow	                        为文本添加阴影
+        text-wrap	                        指定文本换行规则
+        word-break	                        指定非CJK文字的断行规则
+        word-wrap	                        设置浏览器是否对过长的单词进行换行。
+    2D或者3D属性
+    过渡属性
+        transition	                        此属性是 transition-property、transition-duration、transition-timing-function、transition-delay 的简写形式
+        transition-property	                设置用来进行过渡的 CSS 属性
+        transition-duration	                设置过渡进行的时间长度
+        transition-timing-function	        设置过渡进行的时序函数
+        transition-delay	                指定过渡开始的时间
+    用户外观属性
+
+
+
+CSS 元素选择器
+参考资料
+https://www.runoob.com/cssref/css-selectors.html
+
+    .class	                .intro	                选择所有class="intro"的元素
+    #id	                    #firstname	            选择所有id="firstname"的元素
+    *	                    *	                    选择所有元素
+    element	                p	                    选择所有<p>元素
+    element,element	        div,p	                选择所有<div>元素和<p>元素
+    element element	        div p	                选择<div>元素内的所有<p>元素
+    element>element	        div>p	                选择所有父级是 <div> 元素的 <p> 元素
+    element+element	        div+p	                选择所有紧跟在 <div> 元素之后的第一个 <p> 元素
+    [attribute]	            [target]	            选择所有带有target属性元素
+    [attribute=value]	    [target=-blank]	        选择所有使用target="-blank"的元素
+    [attribute~=value]	    [title~=flower]	        选择标题属性包含单词"flower"的所有元素
+    [attribute|=language]	[lang|=en]	            选择 lang 属性等于 en，或者以 en- 为开头的所有元素
+    :link	                a:link	                选择所有未访问链接
+    :visited	            a:visited	            选择所有访问过的链接
+    :active	                a:active	            选择活动链接
+    :hover	                a:hover	                选择鼠标在链接上面时
+    :focus	                input:focus	            选择具有焦点的输入元素
+    :first-letter	        p:first-letter	        选择每一个<p>元素的第一个字母
+    :first-line	            p:first-line	        选择每一个<p>元素的第一行
+    :first-child	        p:first-child	        指定只有当<p>元素是其父级的第一个子级的样式。
+    :before	                p:before	            在每个<p>元素之前插入内容
+    :after	                p:after	                在每个<p>元素之后插入内容
+    :lang(language)	        p:lang(it)	            选择一个lang属性的起始值="it"的所有<p>元素
+    element1~element2	    p~ul	                选择p元素之后的每一个ul元素
+    [attribute^=value]	    a[src^="https"]	        选择每一个src属性的值以"https"开头的元素
+    [attribute$=value]	    a[src$=".pdf"]	        选择每一个src属性的值以".pdf"结尾的元素
+    [attribute*=value]	    a[src*="runoob"]	    选择每一个src属性的值包含子字符串"runoob"的元素
+    :first-of-type	        p:first-of-type	        选择每个p元素是其父级的第一个p元素
+    :last-of-type	        p:last-of-type	        选择每个p元素是其父级的最后一个p元素
+    :only-of-type	        p:only-of-type	        选择每个p元素是其父级的唯一p元素
+    :only-child	            p:only-child	        选择每个p元素是其父级的唯一子元素
+    :nth-child(n)	        p:nth-child(2)	        选择每个p元素是其父级的第二个子元素
+    :nth-last-child(n)	    p:nth-last-child(2)	    选择每个p元素的是其父级的第二个子元素，从最后一个子项计数
+    :nth-of-type(n)	        p:nth-of-type(2)	    选择每个p元素是其父级的第二个p元素
+    :nth-last-of-type(n)	p:nth-last-of-type(2)	选择每个p元素的是其父级的第二个p元素，从最后一个子项计数
+    :last-child	            p:last-child	        选择每个p元素是其父级的最后一个子级
+    :root	                :root	                选择文档的根元素
+    :empty	                p:empty	                选择每个没有任何子级的p元素（包括文本节点）
+    :target	                #news:target	        选择当前活动的#news元素（包含该锚名称的点击的URL）
+    :enabled	            input:enabled	        选择每一个已启用的输入元素
+    :disabled	            input:disabled	        选择每一个禁用的输入元素
+    :checked	            input:checked	        选择每个选中的输入元素
+    :not(selector)	        :not(p)	                选择每个并非p元素的元素
+
+
+
+CSS 函数
+    attr()	                        返回选择元素的属性值
+    calc()	                        允许计算 CSS 的属性值，比如动态计算长度值
+    cubic-bezier()	                定义了一个贝塞尔曲线(Cubic Bezier)
+    hsl()	                        使用色相、饱和度、亮度来定义颜色
+    hsla()	                        使用色相、饱和度、亮度、透明度来定义颜色
+    linear-gradient()	            创建一个线性渐变的图
+    radial-gradient()	            用径向渐变创建图像
+    repeating-linear-gradient()	    用重复的线性渐变创建图像
+    repeating-radial-gradient()	    类似 radial-gradient()，用重复的径向渐变创建图像
+    rgb()	                        使用红(R)、绿(G)、蓝(B)三个颜色的叠加来生成各式各样的颜色
+    rgba()	                        使用红(R)、绿(G)、蓝(B)、透明度(A)的叠加来生成各式各样的颜色    0-1 透明度 1 表示完全不透明
+    var()	                        用于插入自定义的属性值
