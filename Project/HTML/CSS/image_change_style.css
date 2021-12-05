@@ -1,0 +1,90 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #848e93;
+}
+.container
+{
+    position: relative;
+    display: flex;
+}
+.container .box
+{
+    position: relative;
+    width: 320px;
+    height: 400px;
+    background: #444;
+    margin: 0 20px;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #2da2ff 25%,
+    #444 25%, #444 50%, #2da2ff 50%, #2da2ff 75%,
+    #444 75%, #444 100%);
+    /* background的赋值语法
+    background:background-color background-image position/background-size background-repeat background-origin background-clip background-attachment initial|inherit; */
+    background-size: 40px 40px;
+    filter: grayscale(1);
+    /* 
+    animation属性由6个属性组成
+    animation-name              动画名称 通常与 @keyframes 混合使用
+    animation-duration          动画播放的时间eg 如果动画为10秒，但是这里设置了5秒，那么动画在播放的时候就只播放5秒的时长
+    animation-timing-function   动画的速度曲线      linear(速度一直不变)    ease(默认的，由慢变快)  ease-in(低速开始)   ease-out(低速结束)    ease-in-out(先变快后变慢)
+    animation-delay             动画开始之前的延时
+    animation-iteration-count   动画播放的次数      infinite 无限循环  n: 指定循环次数
+    animation-direction         是否反向播放动画    reverse 反向    normal  默认正常播放
+     */
+    animation: animateBg 1s linear infinite;
+    animation-play-state: paused;
+    transition: filter 1s;
+    display: flex;
+    justify-content: center;
+}
+.container .box:nth-child(2)
+{
+    /* 
+        linear-gradient  创建一个线性渐变的图像
+        deg属于css的一个角度单位 分为360deg 一周 顺时针计算
+    */
+    background: linear-gradient(45deg, #ff6 25%,
+    #444 25%, #444 50%, #ff6 50%, #ff6 75%,
+    #444 75%, #444 100%);
+    background-size: 40px 40px;
+    /* animation-direction: reverse; */
+}
+.container .box:hover
+{
+    /* animation-play-state pause | running */
+    animation-play-state: running;
+    filter: grayscale(0);
+}
+.container .box img
+{
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    transition: height 0.5s;
+}
+.container .box:hover img
+{
+    height: 120%;
+}
+@keyframes animateBg
+{
+    /* 0% 或者 100% 表示动画持续时间的百分比 */
+    0%
+    {
+        background-position: 0;
+    }
+    100%
+    {
+        background-position: 40px;
+    }
+}

@@ -1,0 +1,21 @@
+/* 
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+body
+{
+    background-image: url(../src/bidiu.gif), url(../src/test.gif);
+    background-position: right bottom, left top;
+}
+/* #example1
+{
+    margin: 10px;
+    height: 100%;
+    width: 100%;
+    
+    
+    background-repeat: no-repeat, repeat;
+} */
