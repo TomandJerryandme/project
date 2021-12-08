@@ -6,6 +6,10 @@
 }
 body
 {
+    /* visibility与display的区别
+    display: none 时，元素隐藏并且不占位置
+    visibility: hidden(visible), 元素隐藏但是占据本来的位置
+    */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,15 +28,24 @@ body
     height: 50px;
     background: #eaeef0;
     margin: 0 10px;
-    border-radius: 59%;
+    /* 使元素呈现为圆形 */
+    border-radius: 50%;
+    /* border这里的设置-生成了同心圆的内部圆形 */
     border: 6px solid #eaeef0;
+    /* 设置了多层的阴影效果，前两个是外部阴影，后面两个是内部阴影 */
     box-shadow: -8px -8px 15px rgba(255, 255, 255, 1),
     8px 8px 15px rgba(0, 0, 0, 0.2),
     inset 3px 3px 5px rgba(0, 0, 0, 0.1),
     inset -1px -1px 5px rgba(255, 255, 255, 1);
 }
+/* 注意： 单冒号(:)用于CSS3伪类，双冒号(::)用于CSS3伪元素 
+::after或者::before用于给元素添加额外内容
+伪类用于在页面中的元素处于某个状态时，为其添加指定的样式 eg: a:hover
+伪元素会创建一个抽象的伪元素，这个元素不是DOM中的真实元素，但是会存在于最终的渲染树中，我们可以为其添加样式
+*/
 .loader span::before
 {
+    /* 表现形式为： 在内层添加一个有颜色的圆形，并赋予动画效果 */
     content: '';
     position: absolute;
     top: 0;
@@ -40,7 +53,7 @@ body
     width: 100%;
     height: 100%;
     background: #5c89ff;
-    /* border-radius： 最大值为50% 50%以上都是呈现圆形 */
+    /* border-radius： 最大值为50% 50%以上都是呈现圆形 可以设置为： border-radius: 左上角，右上角，右下角，左下角 */
     border-radius: 50%;
     box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.1),
     inset -1px -1px 5px rgba(255, 255, 255, 1);
@@ -50,12 +63,19 @@ body
 }
 @keyframes animate
 {
-    0%,9.99%,70.001%
+    0%,9.99%,60.001%
+    /* 这里的参数与下方的参数组合形成 0-100% 也就是该动画的全部时间
+    0-9.99, 10-70, 70.001-100 */
     {
+        /* scale(x, y) : x方向放大x倍，y轴方向放大y倍
+            scaleX(x): x方向放大
+            scaleY(y)：y方向放大
+        */
         transform: scale(0);
     }
-    10%,70%
+    10%,60%
     {
+        /* 在动画演出的10%-60%的时间内，动画使用元素的大小为原来的1倍 */
         transform: scale(1);
     }
 }
@@ -64,7 +84,8 @@ body
 {
     0%
     {
-        /* 滤镜属性： 色相旋转 */
+        /* 滤镜属性： 色相旋转，其中，0-360指的是在色相圆环中对应的角度
+        注：色相即为颜色 */
         filter: hue-rotate(0deg);
     }
     100%
