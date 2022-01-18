@@ -1,4 +1,5 @@
 import pymysql
+import MySQLdb as _mysql
 
 import psycopg2
 
@@ -11,11 +12,15 @@ def get_connection(conn_info, conn_database=None):
     try:
         conn_func = psycopg2.connect
         if not conn_info.get('sslmode', None):
-            conn_func = pymysql.connect
+            conn_func = _mysql.connect
         conn = conn_func(host=conn_info.get('host'), user=conn_info.get('user'), password=conn_info.get('password'), database=conn_database if conn_database else conn_info.get('database'), port=conn_info.get('port', None))
+        from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+        conn.autocommit = False
+        # 设置自动提交
+        # conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     except psycopg2.Error:
         print(error_str % 'postgre ')
-    except pymysql.Error:
+    except _mysql.Error:
         print(error_str % 'mysql ')
     return conn
 
@@ -53,16 +58,17 @@ def get_cursor(conn, cursor_type=None):
 mysql_config_information = {
     'host': 'localhost',
     'user': 'root',
+    'port': 3306,
     'password': '123456',
     'database': 'information_schema',
 }
 # 连接pg数据库的配置
 pg_config_information = {
-    'host': 'db13-03.dev.mypscloud.com',
+    'host': 'liuxuan02-dev.insuite.net',
     'user': 'odoo',
-    'password': 'IJW8C3vhS4XbKNJh',
+    'password': 'liuxuan02qsdysBM33oQVKToQ',
     'database': 'postgres',
-    'port': 35434,
+    'port': 30059,
     'sslmode': 'prefer',
 }
 
