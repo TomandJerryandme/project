@@ -1,0 +1,309 @@
+https://mp.weixin.qq.com/s/eOOdFufv4TjRiX2v_PO1Pg
+
+1、禁用右键点击（Disable right-click）
+    $(document).ready(function(){
+        $(document).bind("contextmenu",function(e){
+            return false;
+        });
+    });
+2、禁用搜索文本框（Disappearing search field text）
+    $(document).ready(function() {
+    $("input.text1").val("Enter your search text here");
+    textFill($('input.text1'));
+    });
+
+    function textFill(input){ //input focus text function
+    var originalvalue = input.val();
+    input.focus( function(){
+        if( $.trim(input.val()) == originalvalue ){ input.val(''); }
+    });
+    input.blur( function(){
+        if( $.trim(input.val()) == '' ){ input.val(originalvalue); }
+    });
+    }
+
+3、新窗口打开链接（Opening links in a new window）
+    $(document).ready(function() {
+    //Example 1: Every link will open in a new window
+    $('a[href^="http://"]').attr("target", "_blank");
+
+    //Example 2: Links with the rel="external" attribute will only open in a new window
+    $('a[@rel$='external']').click(function(){
+        this.target = "_blank";
+    });
+    });
+    // how to use
+    <a href="http://www.opensourcehunter.com" rel="external">open link</a>
+
+4、 检测浏览器（Detect browser）
+    $(document).ready(function() {
+    // Target Firefox 2 and above
+    if ($.browser.mozilla && $.browser.version >= "1.8" ){
+    // do something
+    }
+
+    // Target Safari
+    if( $.browser.safari ){
+    // do something
+    }
+
+    // Target Chrome
+    if( $.browser.chrome){
+    // do something
+    }
+
+    // Target Camino
+    if( $.browser.camino){
+    // do something
+    }
+
+    // Target Opera
+    if( $.browser.opera){
+    // do something
+    }
+
+    // Target IE6 and below
+    if ($.browser.msie && $.browser.version <= 6 ){
+    // do something
+    }
+
+    // Target anything above IE6
+    if ($.browser.msie && $.browser.version > 6){
+    // do something
+    }
+    });
+
+5、 预加载图片（Preloading images）
+    $(document).ready(function() {
+    jquery.preloadImages = function()
+    {
+    for(var i = 0; i<arguments.length; i++)="" {="" jquery("<img="">").attr("src", arguments[i]);
+    }
+    }
+    // how to use
+    $.preloadImages("image1.jpg");
+    });
+    </arguments.length;>
+
+6、样式筛选（css Style switcher）
+
+$(document).ready(function() {
+    $("a.Styleswitcher").click(function() {
+        //swicth the LINK REL attribute with the value in A REL attribute
+        $('link[rel=stylesheet]').attr('href' , $(this).attr('rel'));
+    });
+    // how to use
+    // place this in your header
+    <link rel="stylesheet" href="default.css" type="text/css">
+    // the links
+    <a href="#" class="Styleswitcher" rel="default.css">Default Theme</a>
+    <a href="#" rel="red.css">Red Theme</a>
+    <a href="#" class="Styleswitcher" rel="blue.css">Blue Theme</a>
+    });
+
+7、 列高度相同（Columns of equal height）
+
+    $(document).ready(function() {
+    function equalHeight(group) {
+        tallest = 0;
+        group.each(function() {
+            thisHeight = $(this).height();
+            if(thisHeight > tallest) {
+                tallest = thisHeight;
+            }
+        });
+        group.height(tallest);
+    }
+    // how to use
+    $(document).ready(function() {
+        equalHeight($(".left"));
+        equalHeight($(".right"));
+    });
+    });
+
+8、字体大小调整（Font resizing）
+    $(document).ready(function() {
+    // Reset the font size(back to default)
+    var originalFontSize = $('html').css('font-size');
+        $(".resetFont").click(function(){
+        $('html').css('font-size', originalFontSize);
+    });
+    // Increase the font size(bigger font0
+    $(".increaseFont").click(function(){
+        var currentFontSize = $('html').css('font-size');
+        var currentFontSizeNum = parseFloat(currentFontSize, 10);
+        var newFontSize = currentFontSizeNum*1.2;
+        $('html').css('font-size', newFontSize);
+        return false;
+    });
+    // Decrease the font size(smaller font)
+    $(".decreaseFont").click(function(){
+        var currentFontSize = $('html').css('font-size');
+        var currentFontSizeNum = parseFloat(currentFontSize, 10);
+        var newFontSize = currentFontSizeNum*0.8;
+        $('html').css('font-size', newFontSize);
+        return false;
+    });
+    });
+
+9、返回页面顶部（Smooth(animated) page scroll）
+    $(document).ready(function() {
+    $('a[href*=#]').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+    && location.hostname == this.hostname) {
+    var $target = $(this.hash);
+    $target = $target.length && $target
+    || $('[name=' + this.hash.slice(1) +']');
+    if ($target.length) {
+    var targetOffset = $target.offset().top;
+    $('html,body')
+    .animate({scrollTop: targetOffset}, 900);
+        return false;
+    }
+    }
+    });
+    // how to use
+    // place this where you want to scroll to
+    <a name="top"></a>
+    // the link
+    <a href="#top">go to top</a>
+    })
+
+11、 获取鼠标的xy坐标（Get the mouse cursor x and y axis）
+    $(document).ready(function() {
+    $().mousemove(function(e){
+        //display the x and y axis values inside the div with the id XY
+        $('#XY').html("X Axis : " + e.pageX + " | Y Axis " + e.pageY);
+    });
+    // how to use
+    <div id="XY"></div>
+
+    });
+
+12、 验证元素是否为空（Verify if an Element is empty）
+    $(document).ready(function() {
+    if ($('#id').html()) {
+    // do something
+    }
+    });
+
+13、替换元素（Replace a element）
+    $(document).ready(function() {
+    $('#id').replaceWith('
+    <div>I have been replaced</div>
+
+    ');
+    });
+
+14、延迟加载（jQuery timer callback functions）
+    $(document).ready(function() {
+    window.setTimeout(function() {
+        // do something
+    }, 1000);
+    }); 
+
+15、移除单词（Remove a word）
+    $(document).ready(function() {
+    var el = $('#id');
+    el.html(el.html().replace(/word/ig, ""));
+    });
+
+16、验证元素是否存在（Verify that an element exists in jQuery）
+    $(document).ready(function() {
+    if ($('#id').length) {
+    // do something
+    }
+    });
+
+17、使整个DIV可点击（Make the entire DIV clickable）
+    $(document).ready(function() {
+    $("div").click(function(){
+        //get the url from href attribute and launch the url
+        window.location=$(this).find("a").attr("href"); return false;
+    });
+    // how to use
+    <div><a href="index.html">home</a></div>
+
+    });
+
+18、 id和class切换（Switch between classes or id's when resizing the window）
+    $(document).ready(function() {
+    function checkWindowSize() {
+    if ( $(window).width() > 1200 ) {
+        $('body').addClass('large');
+    }
+    else {
+        $('body').removeClass('large');
+    }
+    }
+    $(window).resize(checkWindowSize);
+    });
+
+19、克隆对象（Clone a object）
+    $(document).ready(function() {
+    var cloned = $('#id').clone();
+    // how to use
+    <div id="id"></div>
+
+    });
+
+20、 使元素居中屏幕（Center an element on the screen）
+    $(document).ready(function() {
+    jQuery.fn.center = function () {
+        this.css("position","absolute");
+        this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
+        this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
+        return this;
+    }
+    $("#id").center();
+    });
+
+21、自定义选择器（Write our own selector）
+    $(document).ready(function() {
+    $.extend($.expr[':'], {
+        moreThen1000px: function(a) {
+            return $(a).width() > 1000;
+        }
+    });
+    $('.box:moreThen1000px').click(function() {
+        // creating a simple js alert box
+        alert('The element that you have clicked is over 1000 pixels wide');
+    });
+    });
+
+22、 统计元素个数（Count a element）
+    $(document).ready(function() {
+    $("p").size();
+    });
+
+23、自定义Bullets（Use Your Own Bullets）
+    $(document).ready(function() {
+    $("ul").addClass("Replaced");
+    $("ul > li").prepend("? ");
+    // how to use
+    ul.Replaced { list-style : none; }
+    });
+
+24、引用google分发的jQuery（Let Google host jQuery for you）
+    //Example 1
+    <script src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    google.load("jquery", "1.2.6");
+    google.setOnLoadCallback(function() {
+        // do something
+    });
+    </script><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script>
+
+    // Example 2:(the best and fastest way)
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+25、 禁用jQuery动画（Disable jQuery animations）
+    $(document).ready(function() {
+        jQuery.fx.off = true;
+    });
+
+26、防止不兼容冲突（No conflict-mode）
+    $(document).ready(function() {
+    var $jq = jQuery.noConflict();
+    $jq('#id').show();
+    });

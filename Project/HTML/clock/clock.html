@@ -20,23 +20,21 @@
     <div style="width:500px;margin:10px auto;">
         <div id="hoverclock">
         </div>
-        <!-- <div><br /><a href="http://hovertree.com/h/bjaf/hoverclock.htm">Help</a> <a href="http://hovertree.com/texiao/hoverclock/">Demo 1</a> <a href="http://hovertree.com/texiao/hoverclock/demo2.htm">Demo 2</a>
-<a href="http://hovertree.com/texiao/hoverclock/demo3.htm">Demo 3</a> <a href="http://hovertree.com/texiao/hoverclock/demo4.htm">Demo 4</a></div> -->
     </div>
-    <script src="http://hovertree.com/texiao/hoverclock/jquery.hoverclock.2.1.0.js"></script>
+    <script src="../JS/hoverclock.js"></script>
     <script>
         $("#hoverclock").hoverclock({
-            "h_width":300,
-            "h_height":300,
-            //"h_hourNumSize": "80",
-            // "h_hourNumRadii": "200",
-            // "h_hourNumShow": false,
-            // "h_minuteNumShow":false,
-            "h_hourNumColor": "deeppink",
-            "h_backColor": "yellow",
-            // "h_borderColor": "gold",
-            //"h_frontColor":"red",
-            // "h_linkText": "HoverClock"
+            "h_width":300,                     // 钟表宽度
+            "h_height":300,                    // 钟表高度
+            // "h_hourNumSize": "30",          // hour数值大小
+            // "h_hourNumRadii": "130",        // hour数值显示半径
+            // "h_hourNumShow": false,      // 是否显示时间hour数值
+            // "h_minuteNumShow":false,     // 是否显示刻度数值
+            "h_hourNumColor": "deeppink",   // 钟表时针时间1-12的颜色
+            // "h_backColor": "yellow", // 钟表的背景颜色
+            "h_borderColor": "gold",    // 钟表的外层边框
+            // "h_frontColor":"red",        // 钟表底部文字与时针颜色
+            "h_linkText": ""                // 钟表底部文字内容
         });
     </script>
 </body>

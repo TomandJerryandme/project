@@ -4,3 +4,4 @@
 *.EXE
 *.pyc
 Project/HTML/src
+.vscode
