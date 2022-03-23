@@ -6,6 +6,9 @@
 3、选择语言
 4、重启
 
+查看ssh密钥
+cd ~/.ssh
+
 该仓库的地址：
 git@github.com:TomandJerryandme/project.git
 测试提交

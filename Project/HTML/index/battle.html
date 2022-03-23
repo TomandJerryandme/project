@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>tank</title>
+ <style type="text/css">
+  body {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  }
+
+  .map {
+  position: absolute;
+  top: 30px;
+  width: 390px;
+  height: 390px;
+  left: 50%;
+  margin-left: -200px;
+  border: 9px solid orange;
+  background-color: #8B8989;
+  }
+
+  .mapchild {
+  position: absolute;
+  background-size: cover;
+  }
+
+  #ifo {
+  position: absolute;
+  top: 30px;
+  width: 418px;
+  height: 418px;
+  left: 50%;
+  margin-left: -200px;
+  color: green;
+  text-align: center;
+  background-color: #FAEBD7;
+  z-index: 10;
+  }
+ </style>
+ </head>
+ <body>
+ <div id="ifo">
+  <h1 id="ifo_title"></h1>
+  <h3>按键说明：</h3>
+  T：开始游戏(游戏开始后无效)<br/>
+  P:暂停游戏<br/>
+  W、S、A、D：上、下、左、右<br/>
+  ENTER：发射子弹<br/>
+ </div>
+ </body>
+ <script type="text/javascript">
+ //常量及全局变量的定义--------------------------------------------
+ const TANK_W = 30;
+ const TANK_H = 30;
+ const MAP_W = TANK_W * 13;
+ const MAP_H = TANK_H * 13;
+ const BULLENT_W = 7.5;
+ const BULLENT_H = 7.5;
+ const WALL_W = 15;
+ const WALL_H = 15;
+ const BULLENT_FREQ = 30;
+ const TANK_FREQ = 200;
+ const TANK_STEP = 7.5;
+ //当前文件同目录
+ const IMG_PATH = "tankImage/";
+ const MUSIC_PATH = "tankMusic/";
+ // 87=W;83=S;65=A;68=D
+ const KEYCODE_U = 87;
+ const KEYCODE_D = 83;
+ const KEYCODE_L = 65;
+ const KEYCODE_R = 68;
+ //坦克移动不响应时间
+ const NORESPONSEFIRETIME = 200;
+ const NORESPONSETANKMOVETIME = TANK_FREQ + 100;
+ //我方坦克开火、移动状态
+ noresponseFire = false;
+ noresponseTankMove = false;
+ //游戏状态
+ state = "READY";
+ //frequency频率
+
+ //对象id
+ var tank_id = 0;
+ var bullent_id = 0;
+ var wall_id = 0;
+ //敌方坦克总数
+ var emTankNum = 20;
+ var meTankNum = 3;
+ //我方坦克对象
+ var mytank = null;
+
+ var tankArray = new Array();
+ var bullentArray = new Array();
+ //因为功能性砖块会与普通静态砖块重叠所以必须另外存储
+ var functionWallArray = new Array();
+ //地图width=390，地图中最小的静物wall宽度高度=15，所以数组的一维二维均为390/15=26
+ //先声明一维
+ var noMoveArray = new Array(4);
+ for (var i = 0; i < MAP_W / WALL_W; i++) {
+  //一维长度
+  noMoveArray[i] = new Array();
+  //再声明二维
+  for (var j = 0; j < MAP_H / WALL_H; j++) {
+  //二维长度
+  noMoveArray[i][j] = null;
+  }
+ }
+ //常量及全局变量完--------------------------------------------------------------------------------
+
+ //对象的定义-------------------------------------------------------------------------------------
+
+ //坦克对象
+ tank = function(selfType, x, y, belongs, dir) {
+  //共有属性
+  this.id = "tank_" + tank_id++;
+  this.type = "tank";
+  //selfType可取1、2、3表示一类坦克，二类坦克，三类坦克
+  this.selfType = selfType;
+  this.x = x;
+  this.y = y;
+  this.belongs = belongs;
+  this.dir = dir;
+  this.width = TANK_W;
+  this.height = TANK_H;
+  this.life = this.selfType;
+  //因为坦克的img与方向有关，每一次改变dir都会影响img，所以设置一个对象函数用于获取
+  this.getImg = function() {
+  return img = this.belongs + "Tank" + this.selfType + this.dir;
+  }
+
+  //敌方坦克的自移动函数的setInterval的值t
+  this.t;
+  createDOM(this.id, this.width, this.height, this.x, this.y, this.getImg(), 2);
+  //把生成的坦克对象存入移动对象数组
+  tankArray.push(this);
+
+  if (belongs == "me") {
+  mytank = this;
+  meTankNum--;
+  }
+  //敌方坦克调用自移动函数
+  if (this.belongs == "em") {
+  emTankNum--;
+  //检测是否需要生成功能砖块
+  createFunctionWall();
+  autoMove(this);
+  }
+ }
+
+ //子弹对象
+ bullent = function(selfType, x, y, belongs, dir) {
+  //播放发射子弹音乐
+  playMusic("fire");
+  //共有属性
+  this.id = "bullent_" + bullent_id++;
+  this.type = "bullent";
+
+  this.selfType = selfType;
+  this.x = x;
+  this.y = y;
+  this.belongs = belongs;
+  this.dir = dir;
+  this.width = BULLENT_W;
+  this.height = BULLENT_H;
+  //为了与坦克的img保持一致，同样设置一个对象函数用于获取
+  this.getImg = function() {
+  return img = this.type;
+  }
+  //子弹与敌方坦克特有属性，自移动的定时器
+  this.t;
+  createDOM(this.id, this.width, this.height, this.x, this.y, this.getImg(), 1);
+  //把生成的子弹对象存入移动对象数组
+  bullentArray.push(this);
+  autoMove(this);
+
+ }
+
+ //墙对象 
+ wall = function(selfType, x, y, belongs) {
+  //共有属性
+  this.id = "wall_" + wall_id++;
+  this.type = "wall";
+  //wall、steel、star、timer分别表示普通砖块、子弹不可打破砖块、我方老巢、定时器
+  this.selfType = selfType;
+  this.x = x;
+  this.y = y;
+  //belongs取值home、ordinary、function分别表示老巢的砖块、一般砖块、功能性砖块
+  this.belongs = belongs;
+  this.width;
+  this.height;
+
+  if (this.selfType == "star") {
+  //设置全局变量star
+  star = this;
+  this.width = TANK_W;
+  this.height = TANK_H;
+  } else if (this.selfType != "star") {
+  this.width = WALL_W;
+  this.height = WALL_H;
+  }
+  //为了与坦克的img保持一致，同样设置一个对象函数用于获取
+  this.getImg = function() {
+  return img = this.selfType;
+  }
+  var zIndex = belongs == "function" ? 3 : 2;
+  createDOM(this.id, this.width, this.height, this.x, this.y, this.getImg(), zIndex);
+  // if(n==13)console.log(this)
+  //地图中所有的静物都是wall类型的，分为长宽15的wall、steel和长宽30的star；我们只需要存储15规格的，star只有一个不需要存储
+  if (this.belongs != "function") {
+  noMoveArray[x / 15][y / 15] = this;
+  } else {
+  functionWallArray.push(this);
+  }
+ }
+
+ //对象的定义完------------------------------------------------------------------------------------
+
+ //DOM对象创建与显示-------------------------------------------------------------------------------
+ //总体说明：1、为了便于计算所有对象的width、height、x、y均不带px单位
+ // 创建DOM对象函数
+ function createDOM(id, width, height, x, y, img, zIndex) {
+  var map = document.getElementById("map");
+  var it = document.createElement("div");
+  it.id = id;
+  it.style.zIndex = zIndex;
+  map.appendChild(it);
+  showDOM(id, width, height, x, y, img);
+
+ }
+ //删除DOM对象函数
+ function delDOM(id) {
+  var it = document.getElementById(id);
+  map.removeChild(it);
+ }
+
+ //展示函数，根据obj的属性刷新对应的DOM
+ function showDOM(id, width, height, x, y, img) {
+  var it = document.getElementById(id);
+  it.className = "mapchild";
+  it.style.cssText = "width:" + width + "px;height:" + height + "px;left:" + x + "px;top:" + y + "px;background-image:url('" + IMG_PATH + img + ".gif');";
+ }
+ //DOM对象创建与显示完-------------------------------------------------------------------------------
+
+ //对象的创建与销毁函数群-----------------------------------------------------------------------------
+
+ //创建坦克函数
+ //因为坦克出现有一个动画，不能直接new tank生成
+ //new tank(3,15 * 8,15 * 24,"me","U")
+ function createTank(selfType, belongs, x, y) {
+  //先让创建动画显示
+  var emTank_x1 = 0
+  , emTank_x2 = 180;
+  emTank_x3 = 360;
+  var emTank_y = 0;
+  var meTank_x = 15 * 8;
+  var meTank_y = 15 * 24;
+
+  //因为创建动画显示3s+销毁1s，所以需要在4s后创建坦克
+  //这里需要对出生的位置进行检测，防止坦克重叠
+  if (belongs == "me" && meTankNum != 0) {
+  animation("born", 15 * 8, 15 * 24);
+  //我方坦克显示位置固定
+  setTimeout(function() {
+   var mytank = new tank(3,15 * 8,15 * 24,"me","U");
+   flickerObj(mytank.id);
+  }, 4500);
+
+  }
+  if (belongs == "em" && emTankNum != 0) {
+  animation("born", x, y);
+  //我方坦克显示位置固定
+  setTimeout(function() {
+   var emtank = new tank(1,x,y,"em","U");
+   flickerObj(emtank.id);
+  }, 4500);
+  }
+
+  //判断指定位置是否有坦克
+  function isThereHaveTank(x, y) {
+  if (tankArray.length == 0) {
+   return false;
+  }
+  for (var i = 0; i < tankArray.length; i++) {
+   return tankArray[i].x == x && tankArray[i].y == y;
+  }
+  }
+
+ }
+
+ //发射子弹函数
+ //根据发射子弹坦克位置和方向,生成一个子弹
+ function createBullent(obj) {
+  var x, y;
+  switch (obj.dir) {
+  case "U":
+  x = obj.x + 0.5 * obj.width - 0.5 * BULLENT_W;
+  y = obj.y;
+  break;
+  case "D":
+  x = obj.x + 0.5 * obj.width - 0.5 * BULLENT_W;
+  y = obj.y + obj.height - BULLENT_H;
+  break;
+  case "L":
+  x = obj.x;
+  y = obj.y + 0.5 * obj.height - 0.5 * BULLENT_H;
+  break;
+  case "R":
+  x = obj.x + obj.width - BULLENT_W;
+  y = obj.y + 0.5 * obj.height - 0.5 * BULLENT_H;
+  break;
+  }
+  new bullent("speed",x,y,obj.belongs,obj.dir);
+
+ }
+
+ //删除对象函数
+ //在html中删除元素，并将数组中的值赋值为null
+ function delObj(obj) {
+
+  if (obj.t != undefined) {
+  clearInterval(obj.t);
+  }
+
+  switch (obj.type) {
+  case "bullent":
+  delDOM(obj.id);
+  bullentArray.splice(bullentArray.indexOf(obj), 1);
+  break;
+  case "tank":
+  if (--obj.life == 0) {
+   switch (obj.belongs) {
+   case "me":
+   meTankNum == 0 ? gameOver() : createTank(3, null, null, "me", null);
+   ;break;
+
+   case "em":
+   console.log("敌方坦克=" + emTankNum)
+   if (emTankNum == 0) {
+    console.log("victory");
+   }
+   ;break;
+   }
+   //调用销毁坦克动画
+   animation("blast", obj.x, obj.y);
+   delDOM(obj.id);
+   delete tankArray[tankArray.indexOf(obj)];
+   if (obj.belongs == "me") {
+   mytank = null;
+   gameOver();
+   }
+
+   //obj.life!=0
+  } else {
+   obj.selfType = obj.life;
+   showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+  }
+  ;break;
+  case "wall":
+  if (obj.selfType == "star") {
+   img = "destory";
+   showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, img);
+   gameOver();
+  } else if (obj.belongs == "function") {
+   delDOM(obj.id);
+   functionWallArray.splice(bullentArray.indexOf(obj), 1);
+
+  } else {
+   delDOM(obj.id);
+   noMoveArray[obj.x / 15][obj.y / 15] = null;
+  }
+  ;break;
+  }
+
+ }
+
+ //对象的创建与销毁函数群完---------------------------------------------------------------------------
+
+ //碰撞检测与处理------------------------------------------------------------------------------------
+
+ //获取可能碰撞的静态物体函数
+ //在存储静物的时候使用二维数组相当于将地图画成间距15的小格子，所有的静物均在小格子中，所以给定一个物体就可以得到包围它一圈的小格子；
+ //这比遍历整个noMoveArray来的快的多
+ function getPossibleCollisionObj(obj) {
+  var PossibleCollisionObjArray = new Array();
+  var largeWidth = WALL_W;
+  var largeHeight = WALL_H;
+  var x_l = obj.x - largeWidth;
+  var x_r = obj.x + largeWidth + obj.width;
+  var y_u = obj.y - largeHeight;
+  var y_d = obj.y + largeHeight + obj.height;
+  //计算出的左侧、右侧、上下侧均不能出地图
+  if (x_l < 0)
+  x_l = 0;
+  if (x_r > MAP_W)
+  x_r = MAP_W;
+  if (y_u < 0)
+  y_u = 0;
+  if (y_d > MAP_H)
+  y_d = MAP_H;
+
+  for (var i = Math.floor(x_l / largeWidth); i < Math.floor(x_r / largeWidth); i++) {
+  for (var j = Math.floor(y_u / largeHeight); j < Math.floor(y_d / largeHeight); j++) {
+   if (noMoveArray[i][j] != null) {
+   PossibleCollisionObjArray.push(noMoveArray[i][j]);
+   }
+  }
+  }
+  //console.log(PossibleCollisionObjArray);
+  return PossibleCollisionObjArray;
+
+ }
+
+ //碰撞检测及处理函数
+ function collision(obj) {
+  //collresult有三个值，MOVE、DELETE、NOMOVE；move表示检测后的处理结果是继续移动（即使碰上了，有些也不需要处理），DELETE表示删除自身
+  //因为碰撞检测只存在与移动物体，而移动函数需要碰撞检测给出是否移动的结果，所以不能在碰撞处理中直接删除被检测物体
+  var collresult = "MOVE";
+  //单独检测是否碰撞老巢
+  //collresult = isCollision(obj, star) ? gameOver():"MOVE";
+  //检测功能性砖块
+  for (var i = 0; i < functionWallArray.length; i++) {
+  if (functionWallArray[i] != null && isCollision(obj, functionWallArray[i])) {
+   collresult = delColl(obj, functionWallArray[i]);
+  }
+  }
+
+  //检测所有的静物；采用的是遍历所有静物
+  // for (var i = 0; i < noMoveArray.length; i++) {
+  // for (var j = 0; j < noMoveArray[i].length; j++) {
+  //  if (noMoveArray[i][j] != null && isCollision(obj, noMoveArray[i][j])) {
+  //  collresult = delColl(obj, noMoveArray[i][j]);
+  //  }
+  // }
+  // }
+
+  //检测所有的静物；采用的是遍历可能相撞的静物
+  var PossibleCollisionObjArray = getPossibleCollisionObj(obj);
+  for (var i = 0; i < PossibleCollisionObjArray.length; i++) {
+  if (isCollision(obj, PossibleCollisionObjArray[i])) {
+   collresult = delColl(obj, PossibleCollisionObjArray[i]);
+  }
+  }
+
+  //检测坦克
+  for (var i = 0; i < tankArray.length; i++) {
+  //tankArray[i].id != obj.id 因为检测的时候的对象是通过拷贝得到的，它与真正的坦克的id一样
+  if (tankArray[i] != null && tankArray[i].id != obj.id && isCollision(obj, tankArray[i])) {
+   collresult = delColl(obj, tankArray[i]);
+  }
+  }
+
+  //检测子弹
+  for (var i = 0; i < bullentArray.length; i++) {
+  if (bullentArray[i].id != obj.id && isCollision(obj, bullentArray[i])) {
+   collresult = delColl(obj, bullentArray[i]);
+  }
+  }
+  return collresult;
+ }
+
+ //碰撞检测
+ function isCollision(obj, obji) {
+  var iscoll;
+  //用x_l、x_r、y_u、y_d分别表示左右上下的值
+  var x_l = obj.x;
+  var x_r = x_l + obj.width;
+  var y_u = obj.y;
+  var y_d = y_u + obj.height;
+  var x_li = obji.x;
+  var x_ri = x_li + obji.width;
+  var y_ui = obji.y;
+  var y_di = y_ui + obji.height;
+
+  //分别不在被检测物体的左右上下说明发生碰撞，开始处理(第一种检测碰撞算法，考虑反面情况)
+  if (!(x_r <= x_li | x_l >= x_ri | y_d <= y_ui | y_u >= y_di)) {
+  //console.log(obj.id+"与"+obji.id+"相撞了")
+  iscoll = true;
+  } else {
+  iscoll = false;
+  }
+  return iscoll;
+
+ }
+
+ //碰撞处理函数
+ function delColl(obj, obji) {
+  var collresult;
+  switch (obj.type) {
+  case "bullent":
+  switch (obji.type) {
+  case "tank":
+   switch (obj.belongs) {
+   case "me":
+   switch (obji.belongs) {
+   case "me":
+    collresult = "MOVE";
+    break;
+   case "em":
+    collresult = "DELETE";
+    playMusic("hit");
+    animation("blast", obji.x, obji.y);
+    delObj(obji);
+    break;
+   }
+   ;break;
+   case "em":
+   switch (obji.belongs) {
+   case "me":
+    collresult = "DELETE";
+    playMusic("hit");
+    delObj(obji);
+    break;
+   case "em":
+    collresult = "MOVE";
+    break;
+   }
+   ;break;
+   }
+   break;
+  case "wall":
+   switch (obji.selfType) {
+   case "steel":
+   collresult = "DELETE";
+   playMusic("hit");
+   break;
+   case "wall":
+   collresult = "DELETE";
+   playMusic("hit");
+
+   delObj(obji);
+
+   break;
+   case "star":
+   collresult = "DELETE";
+   playMusic("hit");
+   delObj(obji);
+   break;
+   }
+   ;break;
+  case "bullent":
+   switch (obji.belongs) {
+   default:
+   collresult = "MOVE";
+   break;
+   }
+   ;break;
+
+  }
+  ;break;
+
+  case "tank":
+  switch (obji.type) {
+  case "tank":
+   collresult = "NOMOVE";
+   break;
+
+  case "wall":
+   switch (obji.selfType) {
+   case "wall":
+   case "steel":
+   collresult = "NOMOVE";
+   break;
+   case "timer":
+   collresult = "MOVE";
+   timer();
+   delObj(obji);
+   break;
+   case "bomb":
+   collresult = "MOVE";
+   bomb();
+   delObj(obji);
+   break;
+   case "stronghome":
+   collresult = "MOVE";
+   delObj(obji);
+   StrongHome();
+   break;
+   }
+   ;break;
+  case "bullent":
+   switch (obj.belongs) {
+   case "me":
+   switch (obji.belongs) {
+   case "me":
+    collresult = "MOVE";
+    break;
+   case "em":
+    collresult = "DELETE";
+    break;
+   }
+   ;break;
+
+   case "em":
+   switch (obji.belongs) {
+   case "me":
+    collresult = "DELETE";
+    delObj(obji);
+    break;
+   case "em":
+    collresult = "MOVE";
+    break;
+   }
+   ;break;
+
+   }
+   ;break;
+
+  }
+  ;break;
+
+  }
+  //console.log(obj.id+"与"+obji.id+"相撞了  "+"结果="+collresult);
+  return collresult;
+ }
+
+ //碰撞检测与处理完------------------------------------------------------------------------------------
+
+ //坦克与子弹移动函数-----------------------------------------------------------------------------------
+
+ //移动函数
+ function move(obj, newDir) {
+  var oldDir = obj.dir;
+  obj.dir = newDir;
+  if (state != "RUN") {
+  // if(obj.type!="bullent"){
+  // return;
+  // }
+  return;
+  }
+  //新的方向与坦克原来方向相同就前进，否则改变坦克方向
+  if (obj.dir != oldDir && obj.type == "tank") {
+  showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+  return;
+
+  }
+  var x = 0
+  , y = 0;
+  var step = TANK_STEP;
+
+  switch (obj.dir) {
+  case "L":
+  x = -step;
+  break;
+  case "R":
+  x = step;
+  break;
+  case "U":
+  y = -step;
+  break;
+  case "D":
+  y = step;
+  break;
+  }
+  //粗糙的深拷贝
+  var objString = JSON.stringify(obj);
+  var checkObj = JSON.parse(objString);
+  checkObj.x += x;
+  checkObj.y += y;
+  var collresult = collision(checkObj);
+  //出界检测;
+  if (checkObj.x < 0 || (checkObj.x + checkObj.width) > MAP_W || checkObj.y < 0 || (checkObj.y + checkObj.height) > MAP_H) {
+  if (checkObj.type == "tank") {
+   showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+   return;
+  }
+  if (checkObj.type == "bullent") {
+   delObj(obj);
+   return;
+  }
+  //调用碰撞检测及处理函数给出移动结果
+  } else if (collresult == "MOVE") {
+  // if(obj.type=="tank"){
+  // movingFrame(obj,checkObj.x,checkObj.y) 
+  movingFrame(obj, checkObj.x, checkObj.y);
+  // }
+  // console.log("目标y="+checkTank.y)
+  obj.x = checkObj.x;
+  obj.y = checkObj.y;
+  // if(obj.type=="bullent"){
+  // showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+  // }
+  // showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+
+  } else if (collresult == "DELETE") {
+
+  delObj(obj);
+  } else if (collresult == "NOMOVE") {
+  showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+  //如果是敌方坦克就给他一个相反的方向，防止它撞墙不回头
+  if (obj.belongs == "em" && obj.type == "tank") {}
+  return;
+  }
+
+ }
+
+ //反方向函数
+ //返回一个与输入方向相反的方向
+ function negativeDir(dir) {
+  switch (dir) {
+  case "L":
+  return "R";
+  break;
+  case "R":
+  return "L";
+  break;
+  case "U":
+  return "D";
+  break;
+  case "D":
+  return "U";
+  break;
+  }
+ }
+
+ //自动移动函数
+ //子弹坦克所特有
+ function autoMove(obj) {
+  // console.log("游戏状态="+state)
+  var itFreq = BULLENT_FREQ;
+  var itType = obj.type;
+  var itId = obj.id;
+  var itDir = obj.dir;
+  if (obj.type == "tank") {
+  itFreq = TANK_FREQ;
+  }
+  obj.t = setInterval(function() {
+  if (itType == "tank") {
+   var itObj = obj;
+   var turn = randState();
+   if (turn == "Fire") {
+   //console.log(obj.id+" "+obj.t)
+   createBullent(itObj);
+   return;
+   } else if (turn == "none") {
+   itDir = itObj.dir;
+
+   } else {
+   itDir = turn;
+   }
+  }
+  move(obj, itDir);
+  }, itFreq);
+ }
+
+ //简化版移动框架
+ //为了使坦克的移动更平滑;使用移动框架的前提：必须在t时间内屏蔽坦克的任何方向改变
+ //因为js浮点数的处理很复杂，这里仅仅满足x，y为7.5的倍数，step为7.5
+ function movingFrame(obj, x, y) {
+  var objDom = document.getElementById(obj.id);
+  var t = TANK_FREQ;
+  var x1 = obj.x;
+  var y1 = obj.y;
+  var step_x = div(sub(x, x1), t / 10);
+  var step_y = div(sub(y, y1), t / 10);
+  var aaa = 1;
+  var times = 1;
+  var tank_t = setInterval(function() {
+  if (times == t / 10) {
+   clearInterval(tank_t);
+  }
+  times++;
+  x1 = add(x1, step_x);
+  y1 = add(y1, step_y);
+  objDom.style.left = x1 + "px";
+  objDom.style.top = y1 + "px";
+
+  }, 10);
+
+  //浮点数的加减乘除
+
+  function add(a, b) {
+  var c, d, e;
+  try {
+   c = a.toString().split(".")[1].length;
+  } catch (f) {
+   c = 0;
+  }
+  try {
+   d = b.toString().split(".")[1].length;
+  } catch (f) {
+   d = 0;
+  }
+  return e = Math.pow(10, Math.max(c, d)),
+  (mul(a, e) + mul(b, e)) / e;
+  }
+
+  function sub(a, b) {
+  var c, d, e;
+  try {
+   c = a.toString().split(".")[1].length;
+  } catch (f) {
+   c = 0;
+  }
+  try {
+   d = b.toString().split(".")[1].length;
+  } catch (f) {
+   d = 0;
+  }
+  return e = Math.pow(10, Math.max(c, d)),
+  (mul(a, e) - mul(b, e)) / e;
+  }
+
+  function mul(a, b) {
+  var c = 0
+   , d = a.toString()
+   , e = b.toString();
+  try {
+   c += d.split(".")[1].length;
+  } catch (f) {}
+  try {
+   c += e.split(".")[1].length;
+  } catch (f) {}
+  return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+  }
+
+  function div(a, b) {
+  var c, d, e = 0, f = 0;
+  try {
+   e = a.toString().split(".")[1].length;
+  } catch (g) {}
+  try {
+   f = b.toString().split(".")[1].length;
+  } catch (g) {}
+  return c = Number(a.toString().replace(".", "")),
+  d = Number(b.toString().replace(".", "")),
+  mul(c / d, Math.pow(10, f - e));
+  }
+ }
+
+ //tank自动移动定时器的清除与重建函数
+ //itState表示清除、建立定时器
+ function objTimer(itState) {
+  for (var i = 0; i < tankArray.length; i++) {
+  if (tankArray[i] != null && tankArray[i].type == "tank") {
+   if (itState == "stop" && tankArray[i].t != undefined) {
+   clearInterval(tankArray[i].t);
+   }
+   if (itState == "run" && tankArray[i].belongs == "em") {
+   autoMove(tankArray[i]);
+   }
+  }
+  }
+ }
+
+ //坦克随机状态函数
+ //为自动移动的敌方坦克，返回一个方向LRUD或者Fire或者none,分别表示转向、开火和什么也不做(继续前行)
+ function randState() {
+  var z;
+  //敌方坦克随机发射子弹的概率是1/7
+  z = randomNum(10);
+
+  switch (z) {
+  case 1:
+  return "L";
+  break;
+  case 2:
+  return "R";
+  break;
+  case 3:
+  return "D";
+  break;
+  case 4:
+  return "L";
+  break;
+  //5表示发射子弹
+  case 5:
+  return "Fire";
+  break;
+  default:
+  //none表示按照原来方向前进
+  return "none";
+  break;
+  }
+  function randomNum(scope) {
+  return parseInt(Math.random() * scope);
+  }
+
+ }
+
+ //坦克与子弹移动函数完--------------------------------------------------------------------------
+
+ //游戏状态及提示函数群--------------------------------------------------------------------------
+
+ //开始游戏
+ function runGame(mapName) {
+  //生成地图
+  var map = document.createElement("div");
+  map.id = "map";
+  map.className = "map";
+  document.body.appendChild(map);
+  state = "RUN";
+  ifo(state);
+  mapName();
+  playMusic("start");
+  createTank(3, "me");
+  createTank(1, "em", 0, 0);
+  createTank(1, "em", 180, 0);
+  createTank(1, "em", 330, 0);
+
+ }
+ //游戏暂停函数
+ function stopGame() {
+
+  if (state == "RUN") {
+  state = "STOP";
+  ifo("STOP");
+  objTimer("stop");
+  } else if (state == "STOP") {
+  state = "RUN";
+  ifo(state);
+  objTimer("run");
+  }
+
+ }
+
+ //游戏结束函数
+ function gameOver() {
+  state = "OVER";
+  //暂停子弹的所有定时器
+  objTimer("stop");
+  //alert("GAME OVER");
+  createDOM("over", 120, 67.5, (MAP_W - 120) / 2, (MAP_H - 67.5) / 2, "over");
+  flickerObj("over");
+
+ }
+
+ //更改地图
+ //保留的第二关、第三关
+ function changeMap() {
+  //清除所有定时器及地图
+  objTimer("stop");
+  var mapChildrenNodes = map.childNodes;
+  document.body.removeChild(map);
+
+  //执行runGame
+  //runGame(map2);
+
+ }
+
+ //提示信息函数
+ //根据游戏状态提示信息
+ function ifo(state) {
+  var ifo = document.getElementById("ifo");
+  var ifo_title = document.getElementById("ifo_title");
+  switch (state) {
+  case "READY":
+  ifo_title.innerHTML = "坦克大战";
+  break;
+  case "RUN":
+  ifo.style.display = "none";
+  break;
+  case "STOP":
+  ifo.style.display = "block";
+  ifo_title.innerHTML = "暂停";
+  ifo.style.backgroundColor = "transparent";
+  break;
+  }
+ }
+
+ //游戏状态及提示函数群完---------------------------------------------------------------------------------
+
+ //功能砖块函数-----------------------------------------------------------------------------------------
+ //生成功能性砖块
+ function createFunctionWall() {
+  if (emTankNum != 9 || emTankNum != 13 || emTankNum != 17) {
+  return;
+  }
+
+  var selfType, x, y;
+  switch (emTankNum) {
+  case 9:
+  selfType == "timer";
+  x = 15 * 18;
+  y = 15 * 6;
+  break;
+  case 13:
+  selfType == "stronghome";
+  x = 15 * 2;
+  y = 15 * 18;
+  break;
+  case 17:
+  selfType == "bomb";
+  x = 15 * 22;
+  y = 15 * 17;
+  break;
+  }
+  var it = new wall(selfType,x,y,"function");
+  flickerObj(it.id);
+  //11秒后删除它
+  setTimeout(function() {
+  //10秒后删除前闪烁功能砖，如果已经被吃了就取消闪烁
+  if (functionWallArray.indexOf(it) != -1) {
+   flickerObj(it.id);
+  }
+  }, 10000);
+
+  setTimeout(function() {
+  //如果11秒删除时发现功能砖已经被吃了就取消删除
+  if (functionWallArray.indexOf(it) != -1) {
+   delObj(it);
+  }
+  }, 11000);
+ }
+
+ //老巢steel砖块函数
+ function StrongHome() {
+
+  function changeHome(selfType) {
+  for (var i = 0; i < noMoveArray.length; i++) {
+   for (var j = 0; j < noMoveArray[i].length; j++) {
+   if (noMoveArray[i][j] != null && noMoveArray[i][j].belongs == "home" && noMoveArray[i][j].selfType != "star") {
+    noMoveArray[i][j].selfType = selfType;
+    noMoveArray[i][j].img = noMoveArray[i][j].selfType;
+    var obj = noMoveArray[i][j];
+    showDOM(obj.id, obj.width, obj.height, obj.x, obj.y, obj.getImg());
+   }
+   }
+  }
+  }
+  changeHome("steel");
+  setTimeout(function() {
+  changeHome("wall");
+  }, 5000);
+ }
+
+ //爆炸砖块函数
+ function bomb() {
+  for (var i = 0; i < tankArray.length; i++) {
+  objTimer("stop");
+  if (tankArray[i] != null && tankArray[i].belongs == "em") {
+   //console.log(moveArray[i])
+   delObj(tankArray[i]);
+  }
+  }
+ }
+
+ //定时器砖块函数
+ function timer() {
+  //暂停坦克的所有定时器
+  objTimer("stop");
+  setTimeout(function() {
+  objTimer("run");
+  }, 2000);
+ }
+ //功能砖块函数完---------------------------------------------------------------------------------------
+
+ //特效函数群------------------------------------------------------------------------------------------
+
+ //音乐函数
+ function playMusic(src) {
+  var audio = document.createElement("audio");
+  //var audio=document.createElement("<video controls muted autoplay >");
+  audio.src = MUSIC_PATH + src + ".wav";
+  //路径
+  audio.play();
+ }
+
+ //闪烁函数
+ function flickerObj(id, interval) {
+  var it = document.getElementById(id);
+  for (let i = 1; i <= 3; i++) {
+  setTimeout(function() {
+   var display = i % 2 == 0 ? "none" : "block";
+   it.style.display = display;
+   //it.style.display="none";
+  }, (interval / 3) * i);
+
+  }
+ }
+
+ //创建坦克/坦克爆炸动画函数
+ //animationType可取born、blast分别表示坦克出生以及子弹爆炸
+ function animation(animationType, x, y) {
+  //这里给动画所用原子设置一个随机数id，防止两幅动画使用id一样造成只有一幅动画的情况
+  //这样仍可能使用一副动画，不过可能为4/1000
+  animationTypeid = Math.random() * 1000;
+  var id = animationType + animationTypeid;
+  //显示次数
+  var times = animationType == "born" ? 3 : 1;
+  //显示频率
+  var fre = animationType == "born" ? 1000 : 300;
+  // var width = animationType == "born" ? TANK_W : BULLENT_W;
+  // var height = animationType == "born" ? TANK_H : BULLENT_H;
+  var width = TANK_W;
+  var height = TANK_H;
+  //创建动画原子并闪烁
+  for (let i = 1; i <= times; i++) {
+  setTimeout(function() {
+   createDOM(id + i, width, height, x, y, animationType + i);
+   flickerObj(id + i, fre / times);
+  }, fre * i);
+
+  }
+  //闪烁完毕删除闪烁原子
+  setTimeout(function() {
+  for (let i = 1; i <= times; i++) {
+   delDOM(id + i);
+  }
+  }, fre * (times + 1));
+
+ }
+ //特效函数群完--------------------------------------------------------------------------------------
+
+ //坦克大战主逻辑-----------------------------------------------------------------------------------
+
+ ifo("READY");
+
+ //坦克大战主逻辑完---------------------------------------------------------------------------------
+
+ //键盘监听及触发处理开始------------------------------------------------------------------------------
+
+ noresponseFire = false;
+ noresponseTankMove = false;
+ document.onkeydown = function(event) {
+
+  //如果游戏状态为结束就屏蔽所有按键
+  if (state == "OVER") {
+  return;
+  }
+  var myTank = tankArray[0];
+  var newDir;
+  // 87=W;83=S;65=A;68=D
+  code = event.keyCode;
+  //可以通过在此输出code检测键盘的键值码
+  // console.log(code)
+  if (code == 65 && state == "RUN" && mytank != null && noresponseTankMove == false) {
+  setNOresponse("TankMove", NORESPONSEFIRETIME);
+  newDir = "L";
+  } else if (code == 87 && state == "RUN" && mytank != null && noresponseTankMove == false) {
+  console.log(noresponseTankMove)
+  setNOresponse("TankMove", NORESPONSEFIRETIME);
+  newDir = "U";
+  } else if (code == 68 && state == "RUN" && mytank != null && noresponseTankMove == false) {
+  setNOresponse("TankMove", NORESPONSEFIRETIME);
+  newDir = "R";
+  } else if (code == 83 && state == "RUN" && mytank != null && noresponseTankMove == false) {
+  setNOresponse("TankMove", NORESPONSEFIRETIME);
+  newDir = "D";
+  //T 84 开始游戏
+  } else if (code == 84 && state == "READY") {
+  runGame(map1);
+  return;
+  //发射子弹 Enter 13
+  } else if (code == 13 && state == "RUN" && mytank != null && noresponseFire == false) {
+  //按键屏蔽，一定时间内发射子弹无效
+
+  createBullent(myTank);
+  noresponseFire = true;
+  //屏蔽P键300ms
+  setTimeout(function() {
+   noresponseFire = false;
+  }, NORESPONSEFIRETIME);
+  return;
+  //屏蔽其他无关按键
+  //P 80表示暂停
+  } else if (code == 80 && (state == "RUN" || state == "STOP")) {
+  stopGame();
+  return;
+  //屏蔽其他无关按键
+  } else {
+  return;
+  }
+  move(myTank, newDir);
+
+ }
+
+ function setNOresponse(noresponseState, t) {
+  if (noresponseState == "TankMove") {
+  noresponseTankMove = true;
+  //屏蔽P键300ms
+  setTimeout(function() {
+   noresponseTankMove = false;
+  }, t);
+  }
+
+ }
+
+ //键盘监听及触发处理完------------------------------------------------------------------------------
+
+ //地图1------------------------------------------------------------------------------------------
+
+ var map1 = function() {
+
+  //老巢
+  new wall("star",15 * 12,15 * 24,"home");
+  new wall("wall",15 * 11,15 * 25,"home");
+  new wall("wall",15 * 11,15 * 24,"home");
+  new wall("wall",15 * 11,15 * 23,"home");
+
+  new wall("wall",15 * 12,15 * 23,"home");
+  new wall("wall",15 * 13,15 * 23,"home");
+
+  new wall("wall",15 * 14,15 * 25,"home");
+  new wall("wall",15 * 14,15 * 24,"home");
+  new wall("wall",15 * 14,15 * 23,"home");
+  // 老巢完毕
+
+  //所有普通wall
+  for (var i = 1; i <= 11; i += 2) {
+  for (var j = 2; j < 24; j++) {
+   if (j >= 10 && j < 14) {
+   continue;
+   }
+   if (i == 5 || i == 7) {
+   if (j > 8 && j <= 11)
+    continue;
+   if (j > 20)
+    continue;
+   } else {
+   if (j >= 14 && j < 16) {
+    continue;
+   }
+   }
+
+   new wall("wall",15 * 2 * i,15 * j,"ordinary");
+   new wall("wall",15 * 2 * i + 15,15 * j,"ordinary");
+  }
+  }
+
+  for (var i = 0; i < 6; i++) {
+  for (var j = 0; j < 2; j++) {
+   new wall("wall",15 * i + 15 * 10,15 * 11 + 15 * j,"ordinary");
+   if (i > 3)
+   continue;
+   new wall("wall",15 * i + 15 * 4,15 * 12 + 15 * j,"ordinary");
+
+   new wall("wall",15 * i + 15 * 18,15 * 12 + 15 * j,"ordinary");
+  }
+
+  }
+
+  new wall("wall",15 * 12,15 * 15,"ordinary");
+  new wall("wall",15 * 12,15 * 16,"ordinary");
+  new wall("wall",15 * 13,15 * 15,"ordinary");
+  new wall("wall",15 * 13,15 * 16,"ordinary");
+
+  //steel 
+  new wall("steel",15 * 0,15 * 13,"ordinary");
+  new wall("steel",15 * 1,15 * 13,"ordinary");
+
+  new wall("steel",15 * 24,15 * 13,"ordinary");
+  new wall("steel",15 * 25,15 * 13,"ordinary");
+
+  new wall("steel",15 * 12,15 * 6,"ordinary");
+  new wall("steel",15 * 12,15 * 7,"ordinary");
+  new wall("steel",15 * 13,15 * 6,"ordinary");
+  new wall("steel",15 * 13,15 * 7,"ordinary");
+
+ }
+ //地图1完---------------------------------------------------------
+ </script>
+</html>
