@@ -1,6 +1,16 @@
 -- linux命令行中的那些常用操作
+命令使用帮助
+命令 --help 
+命令 --manual   该命令仅对部分命令有用
+eg:
+    find --help
+
 
 ls
+    -a or -A 显（包括隐藏内容）
+        -a 包括父级目录与当前目录
+        -A 不包括父级目录与当前目录
+    -h  -> 以人类可以识别的形式显示 比如 （文件大小如果过大，不以字节的形式展示，而是K、M、G等方式）
 
 | less 
 分页显示内容
@@ -8,3 +18,22 @@ ls
 >
 输出重定向
 eg： ls > 1.txt
+
+find命令
+    -name       ->      按照名称查找文件
+    -iname	    ->      忽略大小写
+        eg: find /folder -name 'name'
+    -size       ->      按照大小查找文件
+        eg: find /etc -size +1M
+            查找etc目录下大小大于1M的文件
+    -user	    ->      按属性查找
+    -type	    ->      按类型查找
+        eg: find . -type f -atime +7        ->      搜索超过七天内被访问过的所有文件
+            find . -type f -amin +10        ->      搜索访问时间超过10分钟的所有文件
+    -exec       ->      find命令后对符合条件的文件的操作
+        eg: find -name 'string' -exec ls -lh {} \;
+    -cmin n     ->      在过去 n 分钟内被修改过
+    -ctime n    ->      在过去n天内被修改过的文件
+    -path, -ipath   ->  查找路径下的文件
+    查找 2013-08-08 到 2013-09-01 号之间的文件
+    find /log/ -name 'production.log-2013*' -newermt '2013-08-08' ! -newermt '2013-09-0'
