@@ -11,6 +11,9 @@ vi与vim下，分为三种命令模式
     3、末行模式
         将文件保存或退出vi，也可以设置编辑环境，如寻找字符串、列出行号……等
 
+vi filename;
+vi +number filename;            打开文件并使光标在number行
+
 插入模式下：
 
 

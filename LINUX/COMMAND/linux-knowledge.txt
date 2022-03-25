@@ -6,6 +6,9 @@ eg:
     find --help
 
 
+sudo apt update
+检查系统中已安装的包是否可以更新
+
 ls
     -a or -A 显（包括隐藏内容）
         -a 包括父级目录与当前目录
