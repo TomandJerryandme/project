@@ -1,7 +1,7 @@
 一、 python内置函数
     input、print、raw_input
         input()
-        print()
+        print()             该方法只能输出最多9360个字符串
         raw_input()
 
     open、execfile、file

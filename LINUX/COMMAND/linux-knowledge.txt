@@ -22,6 +22,11 @@ ls
 输出重定向
 eg： ls > 1.txt
 
+清空文件内容
+1、         命令                                                        解释
+    cat /dev/null > /opt/py/odoo/config/log.log         通过将空设备的内容重定向到文件来实现
+    > filename                                          类似空设备重定向，但是是将NULL重定向到本文件
+
 find命令
     -name       ->      按照名称查找文件
     -iname	    ->      忽略大小写
@@ -36,7 +41,12 @@ find命令
     -exec       ->      find命令后对符合条件的文件的操作
         eg: find -name 'string' -exec ls -lh {} \;
     -cmin n     ->      在过去 n 分钟内被修改过
-    -ctime n    ->      在过去n天内被修改过的文件
+    -ctime n    ->      在过去 n 天内被修改过的文件
     -path, -ipath   ->  查找路径下的文件
     查找 2013-08-08 到 2013-09-01 号之间的文件
-    find /log/ -name 'production.log-2013*' -newermt '2013-08-08' ! -newermt '2013-09-0'
+    find /log/ -name 'production.log-2013*' -newermt '2013-08-08' ! -newermt '2013-09-01'
+
+tail命令
+    desc: 取出文件后面几行
+    -f 持续监听文档的末尾，如果改动的是文件中间或者前面的内容，会被监听到有变化，但是拿不到变化的位置
+    -n  eg: tail -n 100, 取文件最后100行
