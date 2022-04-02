@@ -19,11 +19,11 @@
             globals         变量作用域，全局命名空间，如果被提供，则必须是一个字典对象
             locals          变量作用域，局部命名空间，如果被提供，可以是任何映射对
         round()
-        sum()
-        pow()
-        cmp()
+        sum()               求和 但是会有精度问题，eg: sum([0.1] * 10) = 0.99999999999 如果不想遇到这种问题，需要使用math.fsum([0.1] * 10) = 1.0
+        pow()               求幂等 pow(2, 3) 2**3 = 8 但是自然对数 e 的幂等最好使用 math.exp 或者 math.expml 方法，与其相关的 math.log, math.log2 math.loglp
+        cmp()               比较两个对象，通过使用对象内部定义的比较函数比较 cmp(a, b) (return -1, 0, 1)
         abs(value)
-        divmod()
+        divmod()            divmod(7, 2) ==> return(3, 1) 商3 余1
 
     range、xrange、iter、next、slice、filter
         range()
