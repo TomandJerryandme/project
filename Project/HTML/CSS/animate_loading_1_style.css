@@ -47,6 +47,7 @@ body
 {
     /* 表现形式为： 在内层添加一个有颜色的圆形，并赋予动画效果 */
     content: '';
+    /* content属性 使用 ::before 或者 ::after 伪元素时是必须的，但是可以为'' */
     position: absolute;
     top: 0;
     left: 0;

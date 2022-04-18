@@ -1,21 +1,59 @@
-/* 
+
 *
 {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-} */
+}
 body
 {
-    background-image: url(../src/bidiu.gif), url(../src/test.gif);
-    background-position: right bottom, left top;
+    background: aqua;
+    transform: scale(1);
+    animation-delay: 0.5s;
+    animation: animate linear 0.4s infinite;
 }
-/* #example1
+
+@keyframes animate 
 {
-    margin: 10px;
-    height: 100%;
-    width: 100%;
-    
-    
-    background-repeat: no-repeat, repeat;
-} */
+    /* 考虑使用transform使颜色变换更加平滑 */
+    0%, 10%
+    {
+        filter: hue-rotate(0deg);
+    }
+    10.00001%, 20%
+    {
+        filter: hue-rotate(45deg);
+    }
+    20.00001%, 30%
+    {
+        filter: hue-rotate(90deg);
+    }
+    30.00001%, 40%
+    {
+        filter: hue-rotate(125deg);
+    }
+    40.00001%, 50%
+    {
+        filter: hue-rotate(170deg);
+    }
+    50.00001%, 60%
+    {
+        filter: hue-rotate(205deg);
+    }
+    60.00001%, 70%
+    {
+        filter: hue-rotate(245deg);
+    }
+    70.00001%, 80%
+    {
+        filter: hue-rotate(280deg);
+    }
+    80.00001%, 90%
+    {
+        filter: hue-rotate(320deg);
+    }
+    90.00001%, 100%
+    {
+        filter: hue-rotate(360deg);
+    }
+}
