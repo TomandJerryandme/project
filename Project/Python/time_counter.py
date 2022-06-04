@@ -22,7 +22,7 @@ def time_counter(*out_args, **kwargs):
             end_time_time = time.time()
             # end_time = datetime.now()
             # print("耗时： %s %s" % ((end_time - begin_time) / time_multi, show_config))
-            print("耗时： %s %s" % ((end_time_time - begin_time_time) / time_multi, show_config))
+            print(func_name.__name__ + "耗时： %s %s" % ((end_time_time - begin_time_time) / time_multi, show_config))
         return any_thing
     return decorater_func_name_with_param
 
