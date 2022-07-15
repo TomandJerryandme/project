@@ -5,6 +5,8 @@
 eg:
     find --help
 
+linux 查看本地ip
+ifconfig命令
 
 sudo apt update
 检查系统中已安装的包是否可以更新
