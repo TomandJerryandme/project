@@ -10,7 +10,7 @@ https://github.com/Yang-Jianlin/Download_Video/blob/master/getVideo.py
 （4）日志记录
 （5）重复下载提示
 
-
+m3u8视频的下载最主要的是ts视频文件的合并，而各个ts文件可以直接请求就可以获取到
 """
 
 
@@ -27,6 +27,7 @@ time_start = time.time()
 
 class DownloadVideo:
     def __init__(self, url_m3u8):
+        # url_m3u8 指的是获取所有ts视频列表的访问地址,后续可以考虑动态拿一下
         self.url_m3u8 = url_m3u8
         self.url = re.split(r'[/]', self.url_m3u8)
         self.pre_url = '/'.join(self.url[:len(self.url) - 1])
@@ -304,6 +305,7 @@ def printer(text, delay=0.1):
     """打字机效果"""
 
     for ch in text:
+        # 设置flush为True，可以让print语句立即输出数据，如果为false，则print语句会缓存到一定程度后才执行
         print(ch, end='', flush=True)
         time.sleep(delay)
 
