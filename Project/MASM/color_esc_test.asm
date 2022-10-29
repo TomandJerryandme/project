@@ -4,7 +4,7 @@ assume cs:code
 
 stack segment
     db 128 dup (0)
-    ; dup 有可能是调用了内核系统的 dup 函数，与之类似的还有 dup2 函数
+    ; dup 有可能是调用了内核系统的 dup 函数，与之类似的还有 dup2 函数 内核系统的dup函数的作用，复制一个 打开的文件描述符 并返回， 二者指向同一个打开的文件句柄
 stack ends
 
 data segment
