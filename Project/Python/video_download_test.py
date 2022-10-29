@@ -11,6 +11,8 @@ https://github.com/Yang-Jianlin/Download_Video/blob/master/getVideo.py
 （5）重复下载提示
 
 m3u8视频的下载最主要的是ts视频文件的合并，而各个ts文件可以直接请求就可以获取到
+但是，目前，合并的ts视频文件在修改进度或者拖动进度的时候会有明显的卡顿
+FFmpeg解决
 """
 
 
