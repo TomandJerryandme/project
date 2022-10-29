@@ -4,6 +4,7 @@ assume cs:code
 
 stack segment
     db 128 dup (0)
+    ; dup 有可能是调用了内核系统的 dup 函数，与之类似的还有 dup2 函数
 stack ends
 
 data segment
