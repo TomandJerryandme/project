@@ -13,6 +13,10 @@ https://github.com/Yang-Jianlin/Download_Video/blob/master/getVideo.py
 m3u8视频的下载最主要的是ts视频文件的合并，而各个ts文件可以直接请求就可以获取到
 但是，目前，合并的ts视频文件在修改进度或者拖动进度的时候会有明显的卡顿
 FFmpeg解决
+URL解码
+import urllib.parse as urlparse
+print(urlparse.unquote('%2F'))
+print(urlparse.unquote('https://www.baidu.com/s?ie=UTF-8&wd=python%20url%E8%A7%A3%E7%A0%81'))
 """
 
 
