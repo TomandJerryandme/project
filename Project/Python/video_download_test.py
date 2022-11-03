@@ -27,6 +27,9 @@ import os, sys
 import shutil  # os.mkdir('要清空的文件夹名')
 import threading
 import math
+from ffmpy import FFmpeg
+import lxml.etree as xml
+import urllib.parse as urlparse
 
 time_start = time.time()
 
@@ -48,6 +51,9 @@ class DownloadVideo:
         self.headers = {
             'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
         }
+
+        # 视频文件名称 获取视频文件名称
+        self.video_name = ""
 
         # 存储下载的TS文件
         if not os.path.exists('videoTS'):
@@ -125,7 +131,6 @@ class DownloadVideo:
                         # 为了保证视频切片有序，需要依照每个线程的进行变换，如线程1，编号1+下载时间.ts，线程2，编号2+下载时间.ts
                         tsName = 'videoTS/' + str(num) + '-' + ''.join(tmp) + '.ts'
                         fp_video = open(tsName, 'wb')
-                        print('下载文件%s' % re_link)
                         response = requests.get(url=re_link, headers=self.headers)
                         response_video = response.content
                         # if response.status_code == 200:
@@ -165,7 +170,8 @@ class DownloadVideo:
     def merge_ts_video(self):
         all_ts_dir = 'videoTS'
         ran_num = ''.join(str(time.time()).split('.', 2))
-        merge_ts_path = 'videoMP4\\' + 'video' + ran_num + '.mp4'
+        # 需要获取视频文件名
+        merge_ts_path = 'videoMP4\\' + self.video_name + '.ts'
 
         # 列出所有的ts文件，以列表存储
         list_ts_path = os.listdir(all_ts_dir)
@@ -174,7 +180,36 @@ class DownloadVideo:
                 complete_ts_path = os.path.join(all_ts_dir, i)
                 fp.write(open(complete_ts_path, 'rb').read())
         self.path_log = os.path.join(os.getcwd(), merge_ts_path)
-        print('视频合并完成！视频路径：{0}'.format(self.path_log))
+        # ffmpeg.exe 可执行文件的具体位置
+        # MP4文件路径 进行转码，需要有 ffmpeg 工具
+        mp4_path = self.path_log.split('.')[0] + '.mp4'
+        ff = FFmpeg(r"D:\Ffmpeg\ffmpeg-4.3.1-2021-01-01-essentials_build\bin\ffmpeg.exe", inputs={self.path_log: None}, outputs={mp4_path: ['-v', 'quiet', '-c', 'copy']})
+        ff.run()
+        # 删除ts文件
+        try:
+            shutil.rmtree('videoTS')
+            os.remove(merge_ts_path)
+            shutil.rmtree('filedir')
+            os.remove('data.txt')
+            # 可以不用删除下载记录
+            # os.remove('log.txt')
+        except Exception as error:
+            pass
+        print('视频合并完成！视频路径：{0}'.format(mp4_path))
+
+    def get_video_name(self):
+        """
+            获取视频文件名称 需要根据网站来进行特定开发
+        """
+        base_url = 'https://usersfiles.whatfugui.com:59888/f/'
+        html = requests.get(self.url_m3u8).content.decode()
+        parser = xml.HTMLParser(encoding='utf-8')
+        doc = xml.XML(html, parser=parser)
+        target_script = doc.xpath("//div[@class='m1938a']/script")[0].text
+        self.video_name = target_script[target_script.index('mac_name') + 10: target_script.index(',mac_from') - 1]
+        decode_url = urlparse.unquote(target_script[target_script.index('mac_url') + len('mac_urlx10d26=unescape(') + 1:-4].replace('%u', '\\u'))
+        result_url = base_url + decode_url[decode_url.index('$data')+1:]
+        self.url_m3u8 = result_url
 
     # 下载日志，为了对每行进行编号，每次日志记录为一行，为了得到本行的行号，需要知道上一行的行号，+1操作后即是本行行号
     # 同时，为了节省读取文件时间，每次获取上一行的行号，需要对日志文件从后向前读取最后一行，这里利用seek()方法
@@ -333,6 +368,7 @@ if __name__ == '__main__':
         if home_choose == '1':
             url = input('请输入URL地址(MP4):')
             down = DownloadVideo(url)
+            down.get_video_name()
             down.break_point()
 
             down.get_video_mp4()
@@ -343,6 +379,7 @@ if __name__ == '__main__':
         elif home_choose == '2':
             url = input('请输入URL地址(m3u8):')
             down = DownloadVideo(url)
+            down.get_video_name()
 
             down.break_point()
             down.get_m3u8()
