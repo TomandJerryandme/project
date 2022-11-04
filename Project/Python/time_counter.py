@@ -3,6 +3,8 @@
 import time
 from datetime import datetime
 def time_counter(*out_args, **kwargs):
+    # 装饰器只能接收一个参数，并且还是函数类型, 所以需要一个最外层的装饰来接收参数, 然后返回一个装饰器
+    # @后面必须是装饰器的实例，所以@time_counter之后，返回的是一个decorater_func_name_with_param装饰器实例
     # 最外层的类似装饰器，用于接受装饰器的参数
     time_multi = 0.001
     show_config = 'ms'
