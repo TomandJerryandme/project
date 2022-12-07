@@ -154,3 +154,8 @@ class MagicClass(object):
             obj(*kwrags)
         """
         pass
+    
+    def __str__(self):
+        print('调用了__str__方法')
+        # __str__方法需要有返回值，并且必须是string类型
+        return super(MagicClass, self).__str__()
